@@ -6,7 +6,6 @@ use yii\helpers\ArrayHelper;
 use app\models\Garbages;
 use app\models\Units;
 use yii\helpers\Url;
-use yii\widgets\DetailView;
 
 $this->title = 'เพิ่มรายการขายสินค้า';
 $this->params['breadcrumbs'][] = $this->title;
@@ -29,7 +28,7 @@ $session = Yii::$app->session;
                         <?php // $form->field($model, 'users_id')->textInput() ?>
                     
                         <div class="form-group">
-                            <?= Html::submitButton($model->isNewRecord ? ' บันทึก ' : ' บันทึการแก้ไข ', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                            <?= Html::submitButton(' เพิ่ม ', ['class' =>'btn btn-success']) ?>
                         </div>
 
                         <?php ActiveForm::end(); ?>
@@ -79,8 +78,7 @@ $session = Yii::$app->session;
                           </div>
                           <!-- /.box -->
                           <div>
-                              <?= Html::a(' เคลียร์ ', ['/baskets/clear',], ['class'=>'btn btn-danger']) ?>
-                              <?= Html::a(' บันทึก ', ['/baskets/savecarts',], ['class'=>'btn btn-info']) ?>
+                              <?= Html::a(' บันทึกรายการ ', ['/baskets/savecart',], ['class'=>'btn btn-info']) ?>
                           </div>
                 </div>
             </div>

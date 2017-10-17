@@ -32,7 +32,7 @@ class SaleorderDetails extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['weight', 'price'], 'number'],
+            [['amount'], 'number'],
             [['garbages_id', 'saleorders_id'], 'required'],
             [['garbages_id', 'saleorders_id'], 'integer'],
             [['garbages_id'], 'exist', 'skipOnError' => true, 'targetClass' => Garbages::className(), 'targetAttribute' => ['garbages_id' => 'id']],
@@ -47,8 +47,7 @@ class SaleorderDetails extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'weight' => 'น้ำหนัก',
-            'price' => 'ราคา',
+            'amount' => 'น้ำหนัก',
             'garbages_id' => 'รายการ',
             'saleorders_id' => 'เลขที่',
         ];

@@ -51,9 +51,9 @@ class Saleorders extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'post_timestamp' => 'Post Timestamp',
-            'status' => 'Status',
-            'closed_timestamp' => 'Closed Timestamp',
+            'post_timestamp' => 'ลงประกาศ',
+            'status' => 'สถานะ',
+            'closed_timestamp' => 'ปิดการขาย',
             'total_price' => 'Total Price',
             'users_id' => 'Users ID',
         ];

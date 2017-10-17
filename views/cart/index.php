@@ -78,8 +78,7 @@ $session = Yii::$app->session;
                           </div>
                           <!-- /.box -->
                           <div>
-                              <?= Html::a(' เคลียร์ ', ['/cart/clear',], ['class'=>'btn btn-danger']) ?>
-                              <?= Html::a(' บันทึก ', ['/cart/',], ['class'=>'btn btn-info']) ?>
+                              <?= Html::a(' บันทึก ', ['/baskets/savecart'], ['class'=>'btn btn-info']) ?>
                           </div>
                 </div>
             </div>

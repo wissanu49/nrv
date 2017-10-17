@@ -51,8 +51,5 @@ class Baskets extends \yii\db\ActiveRecord
         ];
     }
     
-    public function getLastID(){
-        $max = Baskets::find()->max('id');
-        return $max+1;
-    }
+   
 }
