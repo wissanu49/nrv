@@ -7,6 +7,7 @@ use app\models\Baskets;
 use app\models\Saleorders;
 use app\models\SaleorderDetails;
 use yii\web\Controller;
+use yii\web\Request;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
@@ -75,27 +76,84 @@ class BasketsController extends Controller
         $transaction = Yii::$app->db->beginTransaction();
         try{
             //Find out how many products have been submitted by the form
-            $count = count(Yii::$app->request->post('Baskets', []));
+            //$count = count(Yii::$app->request->post('Baskets', []));
 
             $orderModel = new Saleorders();    
-            $suborderModel = [new SaleorderDetails()];     
+            //$suborderModel = [new SaleorderDetails()];     
 
             //Create an array of the products submitted
-            for($i = 1; $i < $count; $i++) {
-                $suborderModel[] = new SaleorderDetails();
+            //for($i = 1; $i < $count; $i++) {
+            //    $suborderModel[] = new SaleorderDetails();
+            //}
+            //die('save');
+            
+            if(Yii::$app->request->post()){
+                $flag = 0;
+                // Load Basket
+                $basketsModel = Baskets::find()->where(['users_id'=> Yii::$app->user->identity->id])->all();
+                
+                // Create Order                
+                $orderModel = new Saleorders();
+                $orderModel->id = Saleorders::find()->count('[[id]]');
+                $orderModel->id = $orderModel->id + 1;
+                $orderModel->post_timestamp = date('Y:m:d H:m:s');
+                $orderModel->status = Saleorders::_STATUS_OPEN;
+                $orderModel->total_price = $_POST['Baskets']['summary'];
+                $orderModel->closed_timestamp = NULL;
+                $orderModel->users_id = Yii::$app->user->identity->id;
+                
+                $orderModel->save();
+                if(!$orderModel->save()){
+                    Yii::$app->session->setFlash('error', 'ไม่สามารถสร้างใบงานขายได้');
+                    $flag = $flag + 1;
+                }
+                
+                // COPY Baskets To SubOrder
+                foreach ($basketsModel as $cart) {
+                    
+                    $suborderModel = new SaleorderDetails();
+                    $suborderModel->id = SaleorderDetails::find()->count('[[id]]');
+                    $suborderModel->id = $suborderModel->id+1;
+                    
+                    $suborderModel->garbages_id = $cart->garbages_id;
+                    $suborderModel->amount = $cart->amount;
+                    $suborderModel->saleorders_id = $orderModel->id;
+                    $suborderModel->save();
+                    
+                    if(!$suborderModel->save()){
+                        $flag = $flag + 1;       
+                         Yii::$app->session->setFlash('error', 'ไม่สามารถบันทึกรายการได้');
+                    }
+                      
+                }
+                /// Delete baskets
+                Baskets::deleteAll('users_id = :uid OR session = :session', [':uid' => Yii::$app->user->identity->id, ':session' => Yii::$app->session->getId()]);
+               
+                if($flag == 0){                        
+                    Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
+                    $transaction->commit();                
+                    return $this->redirect(['saleorders/index']);
+                }else{                    
+                    $transaction->rollBack();    
+                    return $this->redirect(['saleorders/index']);
+                }
+                
             }
-
             //Load and validate the multiple models
-            if (Model::loadMultiple($suborderModel, Yii::$app->request->post()) &&                                                                                            Model::validateMultiple($products)) {
+            /*
+            if (Model::loadMultiple($suborderModel, Yii::$app->request->post()) && Model::validateMultiple($suborderModel)) {
 
                 foreach ($suborderModel as $sub) {
-
+                    die('for');
                     //Try to save the models. Validation is not needed as it's already been done.
-                    $sub->save(false);
-                    
-                    if(!$this->findModel($id)->delete()){
+                   // $sub->save(false);
+                   print_r($sub, $return);
+                    /*
+                    if(!$this->findModel($sub->id)->delete()){
                         $transaction->rollBack();
                     }
+                     * 
+                     
 
                 }
                 
@@ -103,6 +161,8 @@ class BasketsController extends Controller
                 $transaction->commit();
                 return $this->redirect('index');
             }
+             * 
+             */
         } catch (Exception $ex) {
             Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');
             $transaction->rollBack();

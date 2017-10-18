@@ -36,27 +36,16 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn'],
 
-            'id',
-            'post_timestamp',
-            'status',
-            'closed_timestamp',
+            //'id',
+            'post_timestamp',            
+            //'closed_timestamp',
             'total_price',
-            // 'users_id',
+            'status',
+            //'users_id',
 
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
 </div>
-<script>
-function addCart(id){
-    alert(id);
-}
-</script>
-<?php
-$this->registerJs("
-        $('#garbage_id').change(function(){ 
-             $('#gid').val($(this).val());
-        });");  
-        
-?>
+
 

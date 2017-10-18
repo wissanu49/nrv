@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Saleorders;
+use app\models\SaleorderDetails;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -35,9 +36,16 @@ class SaleordersController extends Controller
      */
     public function actionIndex()
     {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Saleorders::find(),
-        ]);
+        if(Yii::$app->user->identity->role == "admin"){
+            $dataProvider = new ActiveDataProvider([
+                'query' => Saleorders::find()->orderBy(['id'=>SORT_DESC]),
+            ]);            
+        }else{
+            $dataProvider = new ActiveDataProvider([
+                'query' => Saleorders::find()->where('users_id = :uid', [':uid'=>Yii::$app->user->identity-id])->orderBy(['id'=>SORT_DESC]),
+            ]);
+        }
+        
 
         return $this->render('index', [
             'dataProvider' => $dataProvider,
@@ -101,9 +109,24 @@ class SaleordersController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $transaction = Yii::$app->db->beginTransaction();
+        //$flag = 0;
+        $delete = SaleorderDetails::deleteAll('saleorders_id = :id', [':id' => $id]);
+        if($delete){
+                        
+            $this->findModel($id)->delete();
+            //die();
+            $transaction->commit();
+            Yii::$app->session->setFlash('success', 'ลบรายการเรียบร้อย');            
+            return $this->redirect(['saleorders/index']);
+        }else{
+            Yii::$app->session->setFlash('error', 'ไม่สามารถทำรายการได้');
+            $transaction->rollBack();
+            return $this->redirect(['saleorders/index']);
+        }
+        
+        
+        
     }
 
     /**
