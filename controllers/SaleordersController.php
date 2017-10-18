@@ -9,6 +9,7 @@ use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
+use yii\data\SqlDataProvider;
 
 /**
  * SaleordersController implements the CRUD actions for Saleorders model.
@@ -37,12 +38,22 @@ class SaleordersController extends Controller
     public function actionIndex()
     {
         if(Yii::$app->user->identity->role == "admin"){
-            $dataProvider = new ActiveDataProvider([
-                'query' => Saleorders::find()->orderBy(['id'=>SORT_DESC]),
-            ]);            
+            //$dataProvider = new ActiveDataProvider([
+            //    'query' => Saleorders::find()->orderBy(['id'=>SORT_DESC]),
+            //]);            
+            
+            $dataProvider = new SqlDataProvider([
+                'sql' => 'SELECT post_timestamp, total_price, status, COUNT(saleorder_details.id) AS Amount ' . 
+                         'FROM saleorders ' .
+                         'INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) ' .
+                         //'INNER JOIN ArticleTags ON (Articles.ID = ArticleTags.ID) ' .
+                         'WHERE users_id=:uid' ,
+                         //'GROUP BY ArticleID',
+                'params' => [':uid' => Yii::$app->user->identity->id],
+            ]);
         }else{
             $dataProvider = new ActiveDataProvider([
-                'query' => Saleorders::find()->where('users_id = :uid', [':uid'=>Yii::$app->user->identity-id])->orderBy(['id'=>SORT_DESC]),
+                'query' => Saleorders::find()->where('users_id = :uid', [':uid'=>Yii::$app->user->identity->id])->orderBy(['id'=>SORT_DESC]),
             ]);
         }
         

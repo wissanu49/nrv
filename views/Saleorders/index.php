@@ -37,12 +37,26 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-            'post_timestamp',            
-            //'closed_timestamp',
-            'total_price',
-            'status',
-            //'users_id',
-
+             [
+                'attribute' => 'Public at',
+                'filter' => FALSE,//กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
+                'value' => 'post_timestamp',
+            ],
+            [
+                'attribute' => 'Price',
+                'filter' => FALSE,//กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
+                'value' => 'total_price',
+            ],
+            [
+                'attribute' => 'Qty',
+                'filter' => FALSE,//กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
+                'value' => 'Amount',
+            ],
+            [
+                'attribute' => 'Status',
+                'filter' => FALSE,//กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
+                'value' => 'status',
+            ],
             ['class' => 'yii\grid\ActionColumn'],
         ],
     ]); ?>
