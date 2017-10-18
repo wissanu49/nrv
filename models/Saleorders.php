@@ -23,6 +23,11 @@ class Saleorders extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    const _STATUS_OPEN = 'open';
+    const _STATUS_CLOSED = 'closed';
+    const _STATUS_RESERV = 'reserv';
+    const _STATUS_CANCEL = 'cancel';
+    
     public static function tableName()
     {
         return 'saleorders';
@@ -51,10 +56,10 @@ class Saleorders extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'post_timestamp' => 'ลงประกาศ',
+            'post_timestamp' => 'ลงประกาศเมื่อ',
             'status' => 'สถานะ',
-            'closed_timestamp' => 'ปิดการขาย',
-            'total_price' => 'Total Price',
+            'closed_timestamp' => 'ปิดการขายเมื่อ',
+            'total_price' => 'ราคารวม / บาท',
             'users_id' => 'Users ID',
         ];
     }
