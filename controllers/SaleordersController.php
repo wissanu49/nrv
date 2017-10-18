@@ -39,16 +39,16 @@ class SaleordersController extends Controller
     {
         if(Yii::$app->user->identity->role == "admin"){
             //$dataProvider = new ActiveDataProvider([
-            //    'query' => Saleorders::find()->orderBy(['id'=>SORT_DESC]),
+            //    'query' => Saleorders::find()->select(['saleorders.*','COUNT(saleorder_details.id) AS cnt'])->innerJoin('saleorder_details', 'saleorders.id = saleorder_details.saleorders_id' )->orderBy(['saleorders.id'=>SORT_DESC]),
             //]);            
             
             $dataProvider = new SqlDataProvider([
-                'sql' => 'SELECT post_timestamp, total_price, status, COUNT(saleorder_details.id) AS Amount ' . 
+                'sql' => 'SELECT saleorders.*, COUNT(saleorder_details.id) AS amount ' . 
                          'FROM saleorders ' .
                          'INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) ' .
                          //'INNER JOIN ArticleTags ON (Articles.ID = ArticleTags.ID) ' .
-                         'WHERE users_id=:uid' ,
-                         //'GROUP BY ArticleID',
+                         //'WHERE users_id=:uid' ,
+                         'ORDER BY saleorders.id DESC',
                 'params' => [':uid' => Yii::$app->user->identity->id],
             ]);
         }else{

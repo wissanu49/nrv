@@ -60,7 +60,7 @@ class Saleorders extends \yii\db\ActiveRecord
             'status' => 'สถานะ',
             'closed_timestamp' => 'ปิดการขายเมื่อ',
             'total_price' => 'ราคารวม / บาท',
-            'users_id' => 'Users ID',
+            'users_id' => 'โดย',
         ];
     }
 

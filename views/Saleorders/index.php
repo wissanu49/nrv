@@ -37,27 +37,46 @@ $this->params['breadcrumbs'][] = $this->title;
             ['class' => 'yii\grid\SerialColumn'],
 
             //'id',
-             [
-                'attribute' => 'Public at',
+            //'post_timestamp',
+            //'total_price',
+            //'amount',
+            //'status',
+            [
+                'label' => 'ลงประกาศเมื่อ',
+                'attribute' => 'post_timestamp',
                 'filter' => FALSE,//กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
                 'value' => 'post_timestamp',
             ],
             [
-                'attribute' => 'Price',
+                'label' => 'รายการรวม',
+                'attribute' => 'amount',
+                'filter' => FALSE,//กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
+                'value' => 'amount',
+            ],
+            [
+                'label' => 'ราคารวม',
+                'attribute' => 'total_price',
                 'filter' => FALSE,//กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
                 'value' => 'total_price',
             ],
             [
-                'attribute' => 'Qty',
-                'filter' => FALSE,//กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
-                'value' => 'Amount',
-            ],
-            [
-                'attribute' => 'Status',
+                'label' => 'สถานะ',
+                'attribute' => 'status',
                 'filter' => FALSE,//กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
                 'value' => 'status',
             ],
+             [
+                'label' => '',
+                'format' => 'raw',
+                'value' => function ($data) {
+                        return Html::a('รายละเอียด',['saleorders/view','id'=>$data['id']]);
+                    },
+            ],
+            /*
+             
             ['class' => 'yii\grid\ActionColumn'],
+             * 
+             */
         ],
     ]); ?>
 </div>
