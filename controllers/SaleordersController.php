@@ -70,8 +70,12 @@ class SaleordersController extends Controller
      */
     public function actionView($id)
     {
+      
+        $dataprovider = SaleorderDetails::find()->where(['saleorders_id'=> $id])->all();
+        
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'dataProvider' => $dataprovider,
         ]);
     }
 

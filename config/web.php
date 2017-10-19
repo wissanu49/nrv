@@ -17,10 +17,6 @@ $config = [
             'cookieValidationKey' => '9UDIPC8o6bKfrPCHgvaTRqjWr5MQslMB',
             'baseUrl' => $baseUrl,
         ],
-        'cart' => [
-            'class' => 'yz\shoppingcart\ShoppingCart',
-            'cartId' => 'my_application_cart',
-        ],
         /*
 	'view' => [
 			 'theme' => [
