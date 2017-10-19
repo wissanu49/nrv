@@ -13,7 +13,9 @@ $this->title = 'ระบบบริหารจัดการขยะ อบ
                      <div class="box-header with-border">
                          รายการประกาศขาย
                     </div>
-                <div class="box-body">  </div>
+                <div class="box-body">  
+                
+                </div>
             </div>
         </div>
                               

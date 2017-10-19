@@ -8,11 +8,7 @@ use yii\helpers\ArrayHelper;
 /* @var $model app\models\Garbages */
 /* @var $form yii\widgets\ActiveForm */
 ?>
- <section class="content">
-     <div class="box">
-        <div class="box-body">
-            <div class="row">
-                <div class="col-md-5">  
+
                 <?php $form = ActiveForm::begin(); ?>
 
                 <?= $form->field($model, 'garbage_name')->textInput(['maxlength' => true]) ?>
@@ -24,13 +20,10 @@ use yii\helpers\ArrayHelper;
                 <?= $form->field($model, 'units_id')->dropDownList(ArrayHelper::map(app\models\Units::find()->all(), 'id', 'unit_name')) ?>
 
                 <div class="form-group">
+                    <?php echo \yii\helpers\Html::a( ' ย้อนกลับ ', Yii::$app->request->referrer, ['class'=>'btn btn-info']); ?>
                     <?= Html::submitButton($model->isNewRecord ? ' บันทึก ' : ' บันทึการแก้ไข ', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
+                
                 </div>
-
+                 
                 <?php ActiveForm::end(); ?>
-                </div>
-            </div>
-
-        </div>
-     </div>
- </section>
+               

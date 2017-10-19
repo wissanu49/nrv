@@ -10,7 +10,12 @@ $this->title = "ข้อมูลสมาชิก : ".$model->username;
 $this->params['breadcrumbs'][] = ['label' => 'Users', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="users-view">
+<section class="content">
+     <div class="box">
+        <div class="box-body">
+                
+            <div class="row">
+                <div class="col-md-12"> 
 
     <h1><?php //Html::encode($this->title) ?></h1>
 
@@ -51,5 +56,9 @@ $this->params['breadcrumbs'][] = $this->title;
             'role',
         ],
     ]) ?>
+</div>
 
 </div>
+        </div>
+     </div>
+</section>

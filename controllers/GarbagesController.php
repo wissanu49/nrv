@@ -78,16 +78,17 @@ class GarbagesController extends Controller
     {
         $model = new Garbages();
         $model->setScenario('create');
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
+        $transection = \Yii::$app->db->transaction;
+        if ($model->load(Yii::$app->request->post())) {
             Yii::$app->session->garbagelastID = $model->id;
-            return $this->redirect(['view', 'id' => $model->id, 'units_id' => $model->units_id]);
-        } else {
-            Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');
-            return $this->render('create', [
-                'model' => $model,
-            ]);
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
+                $transection->commit();
+                //return $this->redirect(['view', 'id' => $model->id, 'units_id' => $model->units_id]);
+            }else{
+                Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');
+                $transection->rollBack();
+            } 
         }
         
          return $this->render('create', [
@@ -106,15 +107,22 @@ class GarbagesController extends Controller
     public function actionUpdate($id, $units_id)
     {
         $model = $this->findModel($id, $units_id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $transection = \Yii::$app->db->transaction;
+        if ($model->load(Yii::$app->request->post())) {            
+            if($model->save()){
+                $transection->commit();
+                        
               Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
-            return $this->redirect(['view', 'id' => $model->id, 'units_id' => $model->units_id]);
-        } else {
-            return $this->render('update', [
+             //return $this->redirect(['view', 'id' => $model->id, 'units_id' => $model->units_id]);
+             return $this->redirect(['garbages/index']);
+            } else {
+                Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');
+                $transection->rollBack();
+            }
+        }
+        return $this->render('update', [
                 'model' => $model,
             ]);
-        }
     }
 
     /**
@@ -126,10 +134,14 @@ class GarbagesController extends Controller
      */
     public function actionDelete($id, $units_id)
     {
+        $transection = \Yii::$app->db->transaction;
+        
         if($this->findModel($id, $units_id)->delete()){
             Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');
+            $transection->commit();
         }else{
             Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');
+            $transection->rollBack();
         }
 
         return $this->redirect(['index']);

@@ -10,7 +10,12 @@ use yii\helpers\Url;
 $this->title = 'รายการขายสินค้า';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-<div class="saleorders-index">
+<section class="content">
+     <div class="box">
+        <div class="box-body">
+                
+            <div class="row">
+                <div class="col-md-12">  
 
     <p>
         <?= Html::a('ประกาศขายสินค้า', ['baskets/index'], ['class' => 'btn btn-success']) ?>
@@ -65,7 +70,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => FALSE,//กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
                 'value' => 'status',
             ],
-             [
+            [
                 'label' => '',
                 'format' => 'raw',
                 'value' => function ($data) {
@@ -79,6 +84,12 @@ $this->params['breadcrumbs'][] = $this->title;
              */
         ],
     ]); ?>
+    
 </div>
+
+</div>
+        </div>
+     </div>
+</section>
 
 

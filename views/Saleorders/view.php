@@ -18,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 
             <div class="row">
                 <div class="col-md-12">  
-    <p>
+    
         <?php // Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
         <?= Html::a(' ลบรายการ ', ['delete', 'id' => $model->id], [
             'class' => 'btn btn-danger',
@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
-    </p>
+    
 
     <?= DetailView::widget([
         'model' => $model,
@@ -87,6 +87,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                   <td colspan="2" style="text-align: right;"><b>รวม</b> &nbsp;&nbsp;<?=$sum?>&nbsp;บาท</td>                                 
                                 </tr>
                               </table>
+        <?php echo \yii\helpers\Html::a( ' ย้อนกลับ ', Yii::$app->request->referrer, ['class'=>'btn btn-info']); ?>
                                 
                             </div>
                 </div>
