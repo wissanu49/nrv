@@ -4,11 +4,12 @@ use yii\helpers\Html;
 use yii\widgets\DetailView;
 use app\models\Garbages;
 use app\models\Units;
+use yii\bootstrap\ActiveForm;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Saleorders */
 
-$this->title = "รายการขายที่ $model->id";
+$this->title = "รายการขาย";
 $this->params['breadcrumbs'][] = ['label' => 'รายการขาย', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
@@ -27,22 +28,30 @@ $this->params['breadcrumbs'][] = $this->title;
                 'method' => 'post',
             ],
         ]) ?>
-    
+                    <div class="row">
+                <div class="col-md-6">
+                    
+                    <?php $form = ActiveForm::begin(); ?>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            //'id',
-            'post_timestamp',
-            'status',
-            'closed_timestamp',
-            'total_price',
-            //'users_id',
-        ],
-    ]) ?>
-    <br>
-    
-    <div class="box-body no-padding">
+                    <?= $form->field($model, 'post_timestamp')->textInput(['readonly' => true]) ?>
+                    
+                    <?= $form->field($model, 'total_price')->textInput(['readonly' => true]) ?>
+
+                    <?= $form->field($model, 'status')->dropDownList([ 'open' => 'เปิดการขาย', 'closed' => 'ปิดการขาย', 'reserve' => 'จอง', 'cancel' => 'ยกเลิกการขาย', ], ['prompt' => 'สถานะ', 'disabled'=>$model->status == 'closed' ? TRUE : FALSE]) ?>
+
+                    <?= $form->field($model, 'closed_timestamp')->textInput(['readonly' => true]) ?>
+                        <div class="form-group">
+                            <?php if($model->status != 'closed'){ 
+                                echo Html::submitButton(' บันทึก ', ['class' => 'btn btn-primary']);
+                            }
+                           ?>
+                        </div>
+
+                        <?php ActiveForm::end(); ?>               
+                        <br>
+                </div>
+                    </div>
+                        <div class="box-body no-padding">
                               <table class="table table-condensed">
                                 <tr>
                                   <th style="width: 10px">#</th>

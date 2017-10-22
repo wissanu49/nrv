@@ -52,6 +52,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'filter' => FALSE,//กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
                 'value' => 'post_timestamp',
             ],
+            
             [
                 'label' => 'รายการรวม',
                 'attribute' => 'amount',

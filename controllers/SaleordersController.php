@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\data\SqlDataProvider;
+use yii\filters\AccessControl;
 
 /**
  * SaleordersController implements the CRUD actions for Saleorders model.
@@ -22,6 +23,17 @@ class SaleordersController extends Controller
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'only' => ['index','update','delete','create'],
+                'rules' => [
+                    [
+                        'actions' => ['index','update','delete','create'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -43,17 +55,23 @@ class SaleordersController extends Controller
             //]);            
             
             $dataProvider = new SqlDataProvider([
-                'sql' => 'SELECT saleorders.*, COUNT(saleorder_details.id) AS amount ' . 
-                         'FROM saleorders ' .
-                         'INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) ' .
-                         //'INNER JOIN ArticleTags ON (Articles.ID = ArticleTags.ID) ' .
-                         //'WHERE users_id=:uid' ,
-                         'ORDER BY saleorders.id DESC',
+                'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+                         FROM saleorders 
+                         INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) 
+                         AND saleorders.status NOT IN('cancel','closed')
+                         GROUP BY saleorders.id
+                         ORDER BY saleorders.id DESC",
                 'params' => [':uid' => Yii::$app->user->identity->id],
             ]);
         }else{
-            $dataProvider = new ActiveDataProvider([
-                'query' => Saleorders::find()->where('users_id = :uid', [':uid'=>Yii::$app->user->identity->id])->orderBy(['id'=>SORT_DESC]),
+             $dataProvider = new SqlDataProvider([
+                'sql' => 'SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+                         FROM saleorders 
+                         INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id)                         
+                         WHERE users_id = :uid 
+                         GROUP BY saleorders.id
+                         ORDER BY saleorders.id DESC',
+                'params' => [':uid' => Yii::$app->user->identity->id],
             ]);
         }
         
@@ -72,7 +90,20 @@ class SaleordersController extends Controller
     {
       
         $dataprovider = SaleorderDetails::find()->where(['saleorders_id'=> $id])->all();
+        $model = $this->findModel($id);
         
+       
+        if ($model->load(Yii::$app->request->post())) {
+            if($model->status == 'closed'){
+                $model->closed_timestamp = date('Y:m:d H:m:s');
+            }
+            if($model->save()){
+                Yii::$app->session->setFlash('success', 'บันรายการเรียบร้อย');                
+            }else {
+                Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');       
+            }
+        }
+       
         return $this->render('view', [
             'model' => $this->findModel($id),
             'dataProvider' => $dataprovider,
@@ -106,14 +137,24 @@ class SaleordersController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        } else {
-            return $this->render('update', [
+        $transection = Yii::$app->db->beginTransaction;
+        if ($model->load(Yii::$app->request->post())) {
+            
+            if($model->status == 'closed'){
+                $model->closed_timestamp = date('Y:m:d H:m:s');
+            }
+            if($model->save()){
+                $transection->commit();
+                Yii::$app->session->setFlash('success', 'บันรายการเรียบร้อย');                
+            }else {
+                $transection->rollBack();
+                Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');       
+            }
+        }
+        
+        return $this->render('index', [
                 'model' => $model,
             ]);
-        }
     }
 
     /**
