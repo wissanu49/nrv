@@ -49,7 +49,7 @@ class SaleordersController extends Controller
      */
     public function actionIndex()
     {
-        if(Yii::$app->user->identity->role == "admin"){
+        if(Yii::$app->user->identity->role == "admin" || Yii::$app->user->identity->role == "buyer" ){
             //$dataProvider = new ActiveDataProvider([
             //    'query' => Saleorders::find()->select(['saleorders.*','COUNT(saleorder_details.id) AS cnt'])->innerJoin('saleorder_details', 'saleorders.id = saleorder_details.saleorders_id' )->orderBy(['saleorders.id'=>SORT_DESC]),
             //]);            

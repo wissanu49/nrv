@@ -5,7 +5,11 @@
         <!-- Sidebar user panel -->
         <div class="user-panel">
             <div class="pull-left image">
-                <img src="<?php echo Yii::getAlias('@web').'/web/uploads/images/'.Yii::$app->user->identity->image; ?>" class="img-circle"  alt="User Image" />
+                <?php if(Yii::$app->user->identity->image != "" || Yii::$app->user->identity->image != NULL){ ?>
+                    <img src="<?php echo Yii::getAlias('@web').'/web/uploads/images/'.Yii::$app->user->identity->image; ?>" class="img-circle"  alt="User Image" />
+                <?php }else{ ?>
+                    <img src="<?php echo Yii::getAlias('@web').'/web/uploads/images/avatar.jpg' ?>" class="img-circle"  alt="User Image" />
+                <?php } ?>
             </div>
             <div class="pull-left info">
                 <p><?= Yii::$app->user->identity->username ?></p>

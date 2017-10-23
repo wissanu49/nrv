@@ -24,10 +24,10 @@ class UsersController extends Controller
             
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','update','delete','create','uploadimg'],
+                'only' => ['index','update','delete','create','uploadimg','changepwd'],
                 'rules' => [
                     [
-                        'actions' => ['index','update','delete','create','uploadimg'],
+                        'actions' => ['index','update','delete','create','uploadimg','changepwd'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -148,6 +148,36 @@ class UsersController extends Controller
                 'model' => $model,
             ]);
         }
+    }
+    
+    public function actionChangepwd($id)
+    {
+        $model = new Users();
+        $model = Users::findIdentity($id);
+        $model->setScenario('changepwd');
+         
+        $password = $model->password;
+        if ($model->load(Yii::$app->request->post())) {           
+            
+           $model->password = \Yii::$app->security->generatePasswordHash($model->new_password);
+           
+            if($model->save()){
+                
+                \Yii::$app->session->setFlash('success', 'เปลี่ยนรหัสผ่านเรียบร้อย');
+                return $this->render('update', [
+                'model' => $model,
+            ]);
+            } else {
+                \Yii::$app->session->setFlash('erreo', 'เกิดข้อผิดพลาด เปลี่ยนรหัสผ่านไม่สำเร็จ');
+                return $this->render('changepwd', [
+                'model' => $model,
+            ]);
+            }
+            
+        }
+        return $this->render('changepwd', [
+                'model' => $model,
+            ]);
     }
 
     /**

@@ -24,7 +24,7 @@ $this->title = 'ลงทะเบียนเข้าใช้งาน';
 
                    <?= $form->field($model, 'username')->textInput(['maxlength' => true]) ?>
 
-                   <?php //$form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
+                   <?=$form->field($model, 'password')->passwordInput(['maxlength' => true]) ?>
 
                    <?= $form->field($model, 'firstname')->textInput(['maxlength' => true]) ?>
 

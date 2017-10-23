@@ -17,8 +17,8 @@ $this->params['breadcrumbs'][] = 'แก้ไข';
             <div class="row">
              
                 <div class="col-md-12">  
-    <?php echo \yii\helpers\Html::a( ' ย้อนกลับ ', Yii::$app->request->referrer, ['class'=>'btn btn-info']); ?>
-                    
+    <?php echo \yii\helpers\Html::a( ' ย้อนกลับ ', Yii::$app->request->referrer, ['class'=>'btn btn-info']); ?>&nbsp;
+     <?php echo \yii\helpers\Html::a( ' เปลี่ยนรหัสผ่าน ',  ['users/changepwd', 'id' => $model->id], ['class'=>'btn btn-primary']); ?>                
     <?= $this->render('_updateprofile', [
         'model' => $model,
     ]) ?>

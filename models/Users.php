@@ -38,6 +38,10 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     public $ROLE_Seller     = 'seller';
     public $ROLE_Buyer      = 'buyer';
     
+    public $old_password;
+    public $new_password;
+    public $repeat_password;
+    
     public $uploadImageFolder = 'uploads/images'; //ที่เก็บรูปภาพ
     
     public static function tableName()
@@ -58,9 +62,15 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             [['password', 'firstname', 'lastname', 'address', 'province'], 'string', 'max' => 200],
             [['lattitude', 'longitude'], 'string', 'max' => 50],
             [['mobile'], 'string', 'max' => 10],
+            [['password','old_password, new_password, repeat_password'], 'required', 'on' => 'changepwd'],
+            //['old_password', 'compare', 'compareAttribute'=>'password', 'skipOnEmpty' => false, 'message'=>"รหัสผ่านเดิม ไม่ถูกต้อง"],
+            ['repeat_password', 'compare', 'compareAttribute'=>'new_password', 'skipOnEmpty' => false, 'message'=>"รหัสผ่านไม่ตรงกัน"],
+            //[['old_password', 'findPasswords'],  'on' => 'changepwd'],
+            //[['repeat_password'],'compareAttribute'=>'new_password', 'on'=>'changepwd'],
             //[['image'], 'types' => 'jpg'],
             [['username'], 'unique'],
         ];
+        
     }
     
     public function scenarios()
@@ -68,6 +78,7 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
         $sn = parent::scenarios();
         $sn['updateProfile'] = ['username', 'firstname', 'lastname', 'address', 'sub_district', 'district', 'province', 'lattitude', 'longitude', 'mobile', 'role'];
         $sn['upImage'] = ['image'];
+        $sn['changepwd'] = ['old_password', 'new_password', 'repeat_password'];
         return $sn;
     }
 
@@ -92,6 +103,10 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             'image' => 'รูปภาพ',
             'mobile' => 'มือถือ',
             'role' => 'ประเภทสมาชิก',
+            'old_password' => 'รหัสผ่านเดิม',
+            'new_password' => 'รหัสผ่านใหม่',
+            'repeat_password' => 'ยืนยันรหัสผ่านใหม่'
+            
         ];
     }
 
@@ -105,6 +120,7 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
             return false;
         }
     }
+   
     /*
     public function isAdmin()
     {

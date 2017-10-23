@@ -18,8 +18,11 @@ $this->params['breadcrumbs'][] = $this->title;
                 <div class="col-md-12">  
 
     <p>
-        <?= Html::a('ประกาศขายสินค้า', ['baskets/index'], ['class' => 'btn btn-success']) ?>
-        <?php // Html::button('ลงขายสินค้า', ['value'=> Url::to('cart/index'),'class' => 'btn btn-success', 'id'=>'orderButton']) ?>
+        <?php  
+        if(Yii::$app->user->identity->role != "buyer"){
+            echo  Html::a('ประกาศขายสินค้า', ['baskets/index'], ['class' => 'btn btn-success']);
+        }
+        ?>
     </p>
     
     <?php
