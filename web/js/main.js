@@ -4,12 +4,12 @@
  * and open the template in the editor.
  */
 $(function(){
-    $('#orderButton').click(function(){
-        $('#modalOrder').modal('show')
-                .find('#orderContent')
-                .load($(this).attr('value'));
+    $('#modalButton').click(function(){
+        $('#modal').modal('show')
+                .find('#detailsContent')
+                .load($(this).attr('value'));  
+
     });
-    
     
 });
 

@@ -9,6 +9,8 @@ use yii\web\Response;
 use yii\filters\VerbFilter;
 use app\models\LoginForm;
 use app\models\ContactForm;
+use app\models\Saleorders;
+use yii\data\SqlDataProvider;
 
 class SiteController extends Controller
 {
@@ -61,7 +63,19 @@ class SiteController extends Controller
      */
     public function actionIndex()
     {
-        return $this->render('index');
+        $dataProvider = new SqlDataProvider([
+                'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+                         FROM saleorders 
+                         INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) 
+                         AND saleorders.status NOT IN('cancel','closed')
+                         GROUP BY saleorders.id
+                         ORDER BY saleorders.id DESC",
+                'params' => [':uid' => Yii::$app->user->identity->id],
+            ]);
+        
+        return $this->render('index',[
+                'dataProvider' => $dataProvider,
+            ]);
     }
 
     /**

@@ -109,6 +109,18 @@ class SaleordersController extends Controller
             'dataProvider' => $dataprovider,
         ]);
     }
+    
+    public function actionDetails($id)
+    {
+      
+        $dataprovider = SaleorderDetails::find()->where(['saleorders_id'=> $id])->all();
+        $model = $this->findModel($id);        
+              
+        return $this->render('details', [
+            'model' => $this->findModel($id),
+            'dataProvider' => $dataprovider,
+        ]);
+    }
 
     /**
      * Creates a new Saleorders model.
@@ -165,7 +177,7 @@ class SaleordersController extends Controller
      */
     public function actionDelete($id)
     {
-        $transaction = Yii::$app->db->beginTransaction();
+        $transaction = Yii::$app->db->transaction;
         //$flag = 0;
         $delete = SaleorderDetails::deleteAll('saleorders_id = :id', [':id' => $id]);
         if($delete){

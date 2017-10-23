@@ -33,6 +33,18 @@
                 ],
             ]
         ); 
+        }else if(Yii::$app->user->identity->role == "manager"){
+        echo dmstr\widgets\Menu::widget(
+            [
+                'options' => ['class' => 'sidebar-menu'],
+                'items' => [
+                    ['label' => 'เมนูหลัก', 'options' => ['class' => 'header']],
+                    ['label' => 'รายงาน', 'icon' => 'user', 'url' => ['/report']],
+                    ['label' => 'ข้อมูลส่วนตัว', 'icon' => 'user', 'url' => ['/users/update', 'id' => Yii::$app->user->identity->id]],
+                    ['label' => 'ออกจากระบบ', 'icon' => 'dashboard', 'url' => ['site/logout'],  'template' => '<a href="{url}" data-method="post">{icon} {label}</a>'],
+                ],
+            ]
+        ); 
         }else{
             echo dmstr\widgets\Menu::widget(
             [

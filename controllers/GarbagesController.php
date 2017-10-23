@@ -78,16 +78,16 @@ class GarbagesController extends Controller
     {
         $model = new Garbages();
         $model->setScenario('create');
-        $transection = \Yii::$app->db->beginTransaction;
+        $transection = \Yii::$app->db->transaction;
         if ($model->load(Yii::$app->request->post())) {
             Yii::$app->session->garbagelastID = $model->id;
             if($model->save()){
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
-                $transection->commit();
+                //$transection->commit();
                 //return $this->redirect(['view', 'id' => $model->id, 'units_id' => $model->units_id]);
             }else{
                 Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');
-                $transection->rollBack();
+                //$transection->rollBack();
             } 
         }
         
@@ -107,7 +107,7 @@ class GarbagesController extends Controller
     public function actionUpdate($id, $units_id)
     {
         $model = $this->findModel($id, $units_id);
-        $transection = \Yii::$app->db->beginTransaction;
+        $transection = Yii::$app->db->transaction;
         if ($model->load(Yii::$app->request->post())) {            
             if($model->save()){
                 $transection->commit();
@@ -134,7 +134,7 @@ class GarbagesController extends Controller
      */
     public function actionDelete($id, $units_id)
     {
-        $transection = \Yii::$app->db->beginTransaction;
+        $transection = \Yii::$app->db->transaction;
         
         if($this->findModel($id, $units_id)->delete()){
             Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');
