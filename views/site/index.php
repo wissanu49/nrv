@@ -4,7 +4,48 @@ use yii\helpers\Url;
 use yii\grid\GridView;
 use yii\bootstrap\Modal;
 
+use dosamigos\google\maps\LatLng;
+use dosamigos\google\maps\overlays\InfoWindow;
+use dosamigos\google\maps\overlays\Marker;
+use dosamigos\google\maps\Map;
 /* @var $this yii\web\View */
+
+$coord = new LatLng(['lat'=>14.979827,'lng'=>102.097643]);
+$map = new Map([
+    'center'=>$coord,
+    'zoom'=>12,
+    'width'=>'100%',
+    'height'=>'600',
+]);
+
+foreach($users as $c){
+  $coords = new LatLng(['lat'=>$c->lattitude,'lng'=>$c->longitude]);  
+  $marker = new Marker(['position'=>$coords]);
+  $marker->attachInfoWindow(
+    new InfoWindow([
+        'content'=>'
+     
+            <h4>'.$c->firstname.' '.$c->lastname.'</h4>
+              <table class="table table-striped table-bordered table-hover">
+                <tr>
+                    <td>ที่อยู่</td>
+                    <td>'.$c->address.' '.$c->sub_district.' '.$c->district.' '.$c->province.' '.$c->mobile.'</td>
+                </tr>
+              
+                <tr>
+                    <td></td>
+                    <td><a href="saleorders/alldetails/'.$c->id.'" class="btn-xs btn-info">ดูข้อมูล</a></td>
+                </tr>
+              </table>
+
+        '
+    ])
+  );
+  
+  $map->addOverlay($marker);
+}
+
+
 $this->title = 'หน้าหลัก';
 ?>
 <section class="content">
@@ -13,7 +54,7 @@ $this->title = 'หน้าหลัก';
             <div class="box">
                 
                      <div class="box-header with-border">
-                          รายการลงประกาศขาย
+                         <h3>รายการลงประกาศขาย</h3>
                     </div>
                 <div class="box-body">  
                      <?php 
@@ -80,9 +121,13 @@ $this->title = 'หน้าหลัก';
          <div class="col-lg-6">
             <div class="box">
                      <div class="box-header with-border">
-                         รายการประกาศขาย
+                         <h3>แผนที่ผู้ลงประกาศขาย</h3>
                     </div>
-                <div class="box-body">  </div>
+                <div class="box-body"> 
+                     <?php
+                    echo $map->display();
+                    ?>
+                </div>
             </div>
         </div>
                             

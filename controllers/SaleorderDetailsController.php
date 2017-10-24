@@ -40,6 +40,8 @@ class SaleorderDetailsController extends Controller
             ],
         ];
     }
+    
+    
 
     /**
      * Lists all SaleorderDetails models.

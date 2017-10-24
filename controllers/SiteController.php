@@ -11,6 +11,7 @@ use app\models\LoginForm;
 use app\models\ContactForm;
 use app\models\Saleorders;
 use yii\data\SqlDataProvider;
+use yii\db\Query;
 
 class SiteController extends Controller
 {
@@ -70,11 +71,21 @@ class SiteController extends Controller
                          AND saleorders.status NOT IN('cancel','closed')
                          GROUP BY saleorders.id
                          ORDER BY saleorders.id DESC",
-                'params' => [':uid' => Yii::$app->user->identity->id],
             ]);
+        
+        
+        $users = \app\models\Users::find()
+                //->select(['firstname','lastname','address','sub_district','district','province','lattitude','longitude'])
+                ->join('LEFT JOIN','saleorders',$on = 'users.id = saleorders.users_id')
+                ->where('users.id = saleorders.users_id')
+                ->andWhere("saleorders.status NOT IN ('closed','cancel')")
+                ->all();        
+         
+        
         
         return $this->render('index',[
                 'dataProvider' => $dataProvider,
+                'users' => $users,
             ]);
     }
 

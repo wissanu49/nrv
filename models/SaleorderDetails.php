@@ -3,7 +3,7 @@
 namespace app\models;
 
 use Yii;
-
+use yii\data\ActiveDataProvider;
 /**
  * This is the model class for table "saleorder_details".
  *
@@ -52,7 +52,7 @@ class SaleorderDetails extends \yii\db\ActiveRecord
             'saleorders_id' => 'เลขที่',
         ];
     }
-
+    
     /**
      * @return \yii\db\ActiveQuery
      */

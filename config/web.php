@@ -17,6 +17,17 @@ $config = [
             'cookieValidationKey' => '9UDIPC8o6bKfrPCHgvaTRqjWr5MQslMB',
             'baseUrl' => $baseUrl,
         ],
+        'assetManager' => [
+            'bundles' => [
+                'dosamigos\google\maps\MapAsset' => [
+                    'options' => [
+			'key' => 'AIzaSyB991l8cB4DC63bh5D_GFoWo_gX2pFjFQ0',// ใส่ API 
+			'language' => 'th',
+			'version' => '3.1.18'
+			]
+		]
+            ]
+        ],
         /*
 	'view' => [
 			 'theme' => [

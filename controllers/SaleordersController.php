@@ -110,6 +110,18 @@ class SaleordersController extends Controller
         ]);
     }
     
+     public function actionAlldetails($id)
+    {
+      
+        $dataprovider = SaleorderDetails::find()->where(['saleorders_id'=> $id])->all();
+        //$model = \app\models\Users::find()->where('id = :id',['id'=>$id])->all();
+       
+        return $this->render('alldetails', [
+            'model' => $this->findModel($id),
+            'dataProvider' => $dataprovider,
+        ]);
+    }
+    
     public function actionDetails($id)
     {
       

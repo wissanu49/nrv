@@ -24,7 +24,8 @@
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
                     ['label' => 'เมนูหลัก', 'options' => ['class' => 'header']],
-                    ['label' => 'ประกาศขาย', 'icon' => 'file-code-o', 'url' => ['/saleorders']],
+                    ['label' => 'HOME', 'icon' => 'home', 'url' => ['site/index']],
+                    ['label' => 'รายการขาย', 'icon' => 'file-code-o', 'url' => ['/saleorders']],
                     ['label' => 'รายการขยะ', 'icon' => 'dashboard', 'url' => ['/garbages']],
                     ['label' => 'รายงาน', 'icon' => 'dashboard', 'url' => ['/report']],
                     ['label' => 'สมาชิก', 'icon' => 'user', 'url' => ['/users']],
@@ -51,7 +52,8 @@
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
                     ['label' => 'เมนูหลัก', 'options' => ['class' => 'header']],
-                    ['label' => 'ประกาศขาย', 'icon' => 'file-code-o', 'url' => ['/saleorders']],
+                    ['label' => 'HOME', 'icon' => 'home', 'url' => ['site/index']],
+                    ['label' => 'รายการขาย', 'icon' => 'file-code-o', 'url' => ['/saleorders']],
                     ['label' => 'ข้อมูลส่วนตัว', 'icon' => 'user', 'url' => ['/users/update', 'id' => Yii::$app->user->identity->id]],
                     ['label' => 'ออกจากระบบ', 'icon' => 'dashboard', 'url' => ['site/logout'],  'template' => '<a href="{url}" data-method="post">{icon} {label}</a>'],
                 ],
