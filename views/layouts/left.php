@@ -26,11 +26,20 @@
                     ['label' => 'เมนูหลัก', 'options' => ['class' => 'header']],
                     ['label' => 'HOME', 'icon' => 'home', 'url' => ['site/index']],
                     ['label' => 'รายการขาย', 'icon' => 'file-code-o', 'url' => ['/saleorders']],
-                    ['label' => 'รายการขยะ', 'icon' => 'dashboard', 'url' => ['/garbages']],
-                    ['label' => 'รายงาน', 'icon' => 'dashboard', 'url' => ['/report']],
-                    ['label' => 'สมาชิก', 'icon' => 'user', 'url' => ['/users']],
                     ['label' => 'ข้อมูลส่วนตัว', 'icon' => 'user', 'url' => ['/users/update', 'id' => Yii::$app->user->identity->id]],
-                    ['label' => 'ออกจากระบบ', 'icon' => 'dashboard', 'url' => ['site/logout'],  'template' => '<a href="{url}" data-method="post">{icon} {label}</a>'],
+                    ['label' => 'การจัดการระบบ', 
+                        'url'=> ['#'],
+                        'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
+                        'items' => [
+                                ['label' => 'รายการขยะ', 'icon' => 'folder-open', 'url' => ['/garbages']],
+                                ['label' => 'หน่วยนับ', 'icon' => 'folder-o', 'url' => ['/units']],
+                                ['label' => 'รายงาน', 'icon' => 'bar-chart', 'url' => ['/report']],
+                                ['label' => 'สมาชิก', 'icon' => 'users', 'url' => ['/users']],
+                        ]
+                        ],
+                   
+                    
+                    ['label' => 'ออกจากระบบ', 'icon' => 'power-off', 'url' => ['site/logout'],  'template' => '<a href="{url}" data-method="post">{icon} {label}</a>'],
                 ],
             ]
         ); 
@@ -42,7 +51,19 @@
                     ['label' => 'เมนูหลัก', 'options' => ['class' => 'header']],
                     ['label' => 'รายงาน', 'icon' => 'user', 'url' => ['/report']],
                     ['label' => 'ข้อมูลส่วนตัว', 'icon' => 'user', 'url' => ['/users/update', 'id' => Yii::$app->user->identity->id]],
-                    ['label' => 'ออกจากระบบ', 'icon' => 'dashboard', 'url' => ['site/logout'],  'template' => '<a href="{url}" data-method="post">{icon} {label}</a>'],
+                    ['label' => 'ออกจากระบบ', 'icon' => 'power-off', 'url' => ['site/logout'],  'template' => '<a href="{url}" data-method="post">{icon} {label}</a>'],
+                ],
+            ]
+        ); 
+        }else if(Yii::$app->user->identity->role == "buyer"){
+        echo dmstr\widgets\Menu::widget(
+            [
+                'options' => ['class' => 'sidebar-menu'],
+                'items' => [
+                    ['label' => 'เมนูหลัก', 'options' => ['class' => 'header']],
+                    ['label' => 'รายการขาย', 'icon' => 'file-code-o', 'url' => ['site/']],
+                    ['label' => 'ข้อมูลส่วนตัว', 'icon' => 'user', 'url' => ['/users/update', 'id' => Yii::$app->user->identity->id]],
+                    ['label' => 'ออกจากระบบ', 'icon' => 'power-off', 'url' => ['site/logout'],  'template' => '<a href="{url}" data-method="post">{icon} {label}</a>'],
                 ],
             ]
         ); 

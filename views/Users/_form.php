@@ -43,7 +43,7 @@ use yii\web\JsExpression;
             <?php
             if(Yii::$app->user->identity->role == "admin"){
             ?>
-            <?= $form->field($model, 'role')->dropDownList([ 'seller' => 'รับซื้อ', 'buyer' => 'ลงประกาศขาย', 'admin' => 'ผู้ดูแลระบบ', 'manager' => 'ผู้บริหาร', ], ['prompt' => 'ประเภทสมาชิก']) ?>
+            <?= $form->field($model, 'role')->dropDownList([ 'seller' => 'ลงประกาศขาย', 'buyer' => 'รับซื้อ', 'admin' => 'ผู้ดูแลระบบ', 'manager' => 'ผู้บริหาร', ], ['prompt' => 'ประเภทสมาชิก']) ?>
             <?php } ?>
             <div class="form-group">
                 <?= Html::submitButton($model->isNewRecord ? ' เพิ่มข้อมูล ' : ' บันทึกการแก้ไข ', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>

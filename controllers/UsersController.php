@@ -27,7 +27,18 @@ class UsersController extends Controller
                 'only' => ['index','update','delete','create','uploadimg','changepwd'],
                 'rules' => [
                     [
-                        'actions' => ['index','update','delete','create','uploadimg','changepwd'],
+                        'actions' => ['index','delete','create'],
+                        'allow' => true,
+                        //'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            if ( Yii::$app->user->identity->role === 'admin') {
+                                return true;
+                            }
+                            return false;
+                        },
+                    ],
+                    [
+                        'actions' => ['update','uploadimg','changepwd'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],

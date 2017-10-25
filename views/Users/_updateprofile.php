@@ -47,7 +47,7 @@ use yii\web\JsExpression;
             <?php
             if(Yii::$app->user->identity->role == "admin"){
                 
-                echo $form->field($model, 'role')->dropDownList([ 'seller' => 'รับซื้อ', 'buyer' => 'ลงประกาศขาย', 'admin' => 'ผู้ดูแลระบบ', 'manager' => 'ผู้บริหาร', ], ['prompt' => 'ประเภทสมาชิก']);
+                echo $form->field($model, 'role')->dropDownList([ 'seller' => 'ลงประกาศขาย', 'buyer' => 'รับซื้อ', 'admin' => 'ผู้ดูแลระบบ', 'manager' => 'ผู้บริหาร', ], ['prompt' => 'ประเภทสมาชิก']);
                     
             }
             ?>
