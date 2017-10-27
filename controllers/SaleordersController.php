@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Saleorders;
 use app\models\SaleorderDetails;
+use app\models\Users;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -25,10 +26,10 @@ class SaleordersController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','update','delete','create'],
+                'only' => ['index','update','delete','create','memberlist'],
                 'rules' => [
                     [
-                        'actions' => ['index','update','delete','create'],
+                        'actions' => ['index','update','delete','create','memberlist'],
                         'allow' => true,
                         //'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
@@ -126,6 +127,26 @@ class SaleordersController extends Controller
         return $this->render('alldetails', [
             'model' => $this->findModel($id),
             'dataProvider' => $dataprovider,
+        ]);
+    }
+    
+    public function actionMemberlist($id)
+    {
+      
+        $dataProvider = new SqlDataProvider([
+                'sql' => 'SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+                         FROM saleorders 
+                         INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id)                         
+                         WHERE users_id = :uid 
+                         GROUP BY saleorders.id
+                         ORDER BY saleorders.id DESC',
+                'params' => [':uid' => $id],
+            ]);
+       
+        //die(print_r($model));
+        return $this->render('memberlist', [
+            //'users' => $model,
+            'dataProvider' => $dataProvider,
         ]);
     }
     

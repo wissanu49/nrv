@@ -34,7 +34,7 @@ foreach($users as $c){
               
                 <tr>
                     <td></td>
-                    <td><a href="saleorders/alldetails/'.$c->id.'" class="btn-xs btn-info">ดูข้อมูล</a></td>
+                    <td><a href="saleorders/memberlist/'.$c->id.'" class="btn-xs btn-info">ดูข้อมูล</a></td>
                 </tr>
               </table>
 
