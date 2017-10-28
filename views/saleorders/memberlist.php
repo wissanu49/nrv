@@ -5,6 +5,7 @@ use yii\grid\GridView;
 use app\models\Garbages;
 use app\models\Units;
 use yii\bootstrap\ActiveForm;
+use yii\bootstrap\Modal;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Saleorders */
@@ -29,7 +30,7 @@ $this->params['breadcrumbs'][] = $users->firstname . ' ' . $users->lastname;
                                     </tr>
                                     <tr>
                                         <td><b>ที่อยู่</b></td>
-                                        <td><?= $users->address . ' ' . $users->sub_district . ' ' . $users->district . ' ' . $users->province ?></td>
+                                        <td><?= ' เลขที่ ' . $users->address . ' ตำบล ' . $users->sub_district . ' อำเภอ ' . $users->district . ' จังหวัด ' . $users->province ?></td>
                                     </tr>
                                     <tr>
                                         <td><b>หมายเลขโทรศัพท์</b></td>
@@ -83,7 +84,7 @@ $this->params['breadcrumbs'][] = $users->firstname . ' ' . $users->lastname;
                                     'format' => 'raw',
                                     'value' => function ($data) {
                                         return Html::a('รายละเอียด', ['saleorders/details', 'id' => $data['id']], ['class' => 'btn btn-info', 'id' => 'DetailsButton']);
-                                        //return Html::button('รายละเอียด', ['id' => 'DetailsButton', 'value' => \yii\helpers\Url::to(['saleorders/details/'.$data['id']]), 'class' => 'btn btn-info']);
+                                        //return Html::button('รายละเอียด', ['id' => 'DetailsButton', 'href' => \yii\helpers\Url::to(['saleorders/details/' . $data['id']]), 'class' => 'btn btn-info']);
                                     },
                                 ],
                             /*
