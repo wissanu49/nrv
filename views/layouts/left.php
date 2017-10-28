@@ -31,7 +31,7 @@
                         'url'=> ['#'],
                         'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
                         'items' => [
-                                ['label' => 'รายการขยะ', 'icon' => 'folder-open', 'url' => ['/garbages']],
+                                ['label' => 'รายการสินค้า', 'icon' => 'folder-open', 'url' => ['/garbages']],
                                 ['label' => 'หน่วยนับ', 'icon' => 'folder-o', 'url' => ['/units']],
                                 ['label' => 'รายงาน', 'icon' => 'bar-chart', 'url' => ['/report']],
                                 ['label' => 'สมาชิก', 'icon' => 'users', 'url' => ['/users']],

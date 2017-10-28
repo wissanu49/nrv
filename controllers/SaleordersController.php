@@ -134,18 +134,19 @@ class SaleordersController extends Controller
     {
       
         $dataProvider = new SqlDataProvider([
-                'sql' => 'SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+                'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
                          INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id)                         
                          WHERE users_id = :uid 
+                         AND saleorders.status IN ('open')
                          GROUP BY saleorders.id
-                         ORDER BY saleorders.id DESC',
+                         ORDER BY saleorders.id DESC",
                 'params' => [':uid' => $id],
             ]);
-       
+        $model = Users::findIdentity($id);
         //die(print_r($model));
         return $this->render('memberlist', [
-            //'users' => $model,
+            'users' => $model,
             'dataProvider' => $dataProvider,
         ]);
     }
