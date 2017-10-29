@@ -29,7 +29,7 @@
                     ['label' => 'ข้อมูลส่วนตัว', 'icon' => 'user', 'url' => ['/users/update', 'id' => Yii::$app->user->identity->id]],
                     ['label' => 'การจัดการระบบ', 
                         'url'=> ['#'],
-                        'template' => '<a href="{url}" >{label}<i class="fa fa-angle-left pull-right"></i></a>',
+                        'template' => '<a href="{url}" ><i class="fa fa-tv"></i>{label}<i class="fa fa-angle-left pull-right"></i></a>',
                         'items' => [
                                 ['label' => 'รายการสินค้า', 'icon' => 'folder-open', 'url' => ['/garbages']],
                                 ['label' => 'หน่วยนับ', 'icon' => 'folder-o', 'url' => ['/units']],
