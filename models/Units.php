@@ -41,7 +41,7 @@ class Units extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'unit_name' => 'Unit Name',
+            'unit_name' => 'หน่วยนับ',
         ];
     }
 
