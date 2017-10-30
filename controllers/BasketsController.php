@@ -25,7 +25,7 @@ class BasketsController extends Controller
                     [
                         'actions' => ['index','additem','removeitem','savecart'],
                         'allow' => true,
-                        //'roles' => ['@'],
+                        'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             if ( Yii::$app->user->identity->role === 'buyer') {
                                 return FALSE;

@@ -31,7 +31,7 @@ class SaleordersController extends Controller
                     [
                         'actions' => ['index','update','delete','create','memberlist'],
                         'allow' => true,
-                        //'roles' => ['@'],
+                        'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             if (Yii::$app->user->identity->role === 'admin' || Yii::$app->user->identity->role === 'seller') {
                                 return true;

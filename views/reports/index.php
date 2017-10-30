@@ -14,16 +14,7 @@ use yii\widgets\Pjax;
 $this->title = 'รายงาน';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
-
-<section class="content">
-    <div class="box">
-        <div class="box-header with-border">
-
-            <h3 class="box-title"><?php Html::encode($this->title) ?></h3>
-            <?php //echo $this->render('_search', ['model' => $searchModel]);  ?>
-        </div>
-        <div class="box-body">
-            <?php
+<?php
             modal::begin([
                 'header' => '<h4>สร้างรายการสินค้า</h4>',
                 'id' => 'modal',
@@ -44,11 +35,14 @@ JS;
 
             $this->registerJs($script);
             ?>
+<section class="content">
+    <div class="box">
+        <div class="box-header with-border">
 
-
-            <p>
-                <?= Html::button('เพิ่มรายการใหม่', ['value' => Url::to('garbages/create'), 'class' => 'btn btn-success', 'id' => 'creategarbage']) ?>
-            </p>
+            <h3 class="box-title"><?php Html::encode($this->title) ?></h3>
+            <?php //echo $this->render('_search', ['model' => $searchModel]);  ?>
+        </div>
+        <div class="box-body">
             Report
         </div>
     </div>

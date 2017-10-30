@@ -27,7 +27,7 @@ class GarbagesController extends Controller {
                     [
                         'actions' => ['index', 'update', 'delete', 'create'],
                         'allow' => true,
-                        //'roles' => ['@'],
+                        'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             if (Yii::$app->user->identity->role === 'admin') {
                                 return TRUE;

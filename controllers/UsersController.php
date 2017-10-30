@@ -29,7 +29,7 @@ class UsersController extends Controller
                     [
                         'actions' => ['index','delete','create'],
                         'allow' => true,
-                        //'roles' => ['@'],
+                        'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             if ( Yii::$app->user->identity->role === 'admin') {
                                 return true;

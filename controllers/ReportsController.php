@@ -20,12 +20,12 @@ class ReportsController extends Controller {
         return [
              'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'update', 'delete', 'create'],
+                'only' => ['index'],
                 'rules' => [
                     [
-                        'actions' => ['index', 'update', 'delete', 'create'],
+                        'actions' => ['index'],
                         'allow' => true,
-                        //'roles' => ['@'],
+                        'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             if (Yii::$app->user->identity->role === 'admin' || Yii::$app->user->identity->role === 'manager') {
                                 return TRUE;
