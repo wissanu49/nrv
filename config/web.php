@@ -43,7 +43,10 @@ $config = [
         ],
         'user' => [
             'identityClass' => 'app\models\Users',
-            'enableAutoLogin' => true,
+            //'enableAutoLogin' => true,
+            'enableAutoLogin' => false,
+            'authTimeout' => 300,
+            'identityCookie' => ['name' => '_identity', 'httpOnly' => true],
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',

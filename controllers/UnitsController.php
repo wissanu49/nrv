@@ -83,6 +83,7 @@ class UnitsController extends Controller {
             if ($model->save()) {
                 //return $this->redirect(['view', 'id' => $model->id]);
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
+                return $this->redirect(['units/index']);
             } else {
                 Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');
                 //$transection->rollBack();

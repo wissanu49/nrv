@@ -33,7 +33,7 @@
                         'items' => [
                                 ['label' => 'รายการสินค้า', 'icon' => 'folder-open', 'url' => ['/garbages']],
                                 ['label' => 'หน่วยนับ', 'icon' => 'folder-o', 'url' => ['/units']],
-                                ['label' => 'รายงาน', 'icon' => 'bar-chart', 'url' => ['/report']],
+                                ['label' => 'รายงาน', 'icon' => 'bar-chart', 'url' => ['/reports']],
                                 ['label' => 'สมาชิก', 'icon' => 'users', 'url' => ['/users']],
                         ]
                         ],
@@ -49,7 +49,7 @@
                 'options' => ['class' => 'sidebar-menu'],
                 'items' => [
                     ['label' => 'เมนูหลัก', 'options' => ['class' => 'header']],
-                    ['label' => 'รายงาน', 'icon' => 'user', 'url' => ['/report']],
+                    ['label' => 'รายงาน', 'icon' => 'user', 'url' => ['/reports']],
                     ['label' => 'ข้อมูลส่วนตัว', 'icon' => 'user', 'url' => ['/users/update', 'id' => Yii::$app->user->identity->id]],
                     ['label' => 'ออกจากระบบ', 'icon' => 'power-off', 'url' => ['site/logout'],  'template' => '<a href="{url}" data-method="post">{icon} {label}</a>'],
                 ],
