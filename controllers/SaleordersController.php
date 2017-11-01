@@ -16,30 +16,33 @@ use yii\filters\AccessControl;
 /**
  * SaleordersController implements the CRUD actions for Saleorders model.
  */
-class SaleordersController extends Controller
-{
+class SaleordersController extends Controller {
+
     /**
      * @inheritdoc
      */
-    public function behaviors()
-    {
+    public function behaviors() {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index','update','delete','create','memberlist'],
+                'only' => ['index', 'update', 'delete', 'create', 'memberlist', 'selling'],
                 'rules' => [
                     [
-                        'actions' => ['index','update','delete','create','memberlist'],
+                        'actions' => ['index', 'update', 'delete', 'create'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             if (Yii::$app->user->identity->role === 'admin' || Yii::$app->user->identity->role === 'seller') {
                                 return true;
                             }
-                                return false;
+                            return false;
                         },
                     ],
-                                 
+                    [
+                        'actions' => ['selling', 'memberlist'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                    ],
                 ],
             ],
             'verbs' => [
@@ -55,13 +58,21 @@ class SaleordersController extends Controller
      * Lists all Saleorders models.
      * @return mixed
      */
-    public function actionIndex()
-    {
-        if(Yii::$app->user->identity->role == "admin" || Yii::$app->user->identity->role == "buyer" ){
+    public function actionIndex() {
+        if (Yii::$app->user->identity->role == "admin") {
             //$dataProvider = new ActiveDataProvider([
             //    'query' => Saleorders::find()->select(['saleorders.*','COUNT(saleorder_details.id) AS cnt'])->innerJoin('saleorder_details', 'saleorders.id = saleorder_details.saleorders_id' )->orderBy(['saleorders.id'=>SORT_DESC]),
             //]);            
-            
+
+            $dataProvider = new SqlDataProvider([
+                'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+                         FROM saleorders 
+                         INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) 
+                         GROUP BY saleorders.id
+                         ORDER BY saleorders.id DESC",
+                'params' => [':uid' => Yii::$app->user->identity->id],
+            ]);
+        } else if (Yii::$app->user->identity->role == "buyer") {
             $dataProvider = new SqlDataProvider([
                 'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
@@ -71,8 +82,8 @@ class SaleordersController extends Controller
                          ORDER BY saleorders.id DESC",
                 'params' => [':uid' => Yii::$app->user->identity->id],
             ]);
-        }else{
-             $dataProvider = new SqlDataProvider([
+        } else {
+            $dataProvider = new SqlDataProvider([
                 'sql' => 'SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
                          INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id)                         
@@ -82,10 +93,25 @@ class SaleordersController extends Controller
                 'params' => [':uid' => Yii::$app->user->identity->id],
             ]);
         }
-        
+
 
         return $this->render('index', [
-            'dataProvider' => $dataProvider,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionSelling() {
+        $dataProvider = new SqlDataProvider([
+            'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+                         FROM saleorders 
+                         INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) 
+                         GROUP BY saleorders.id
+                         ORDER BY saleorders.id DESC",
+        ]);
+
+
+        return $this->render('selling', [
+                    'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -94,72 +120,111 @@ class SaleordersController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionView($id)
-    {
-      
-        $dataprovider = SaleorderDetails::find()->where(['saleorders_id'=> $id])->all();
+    public function actionView($id) {
+
+        $dataprovider = SaleorderDetails::find()->where(['saleorders_id' => $id])->all();
         $model = $this->findModel($id);
-        
-       
+
+
         if ($model->load(Yii::$app->request->post())) {
-            if($model->status == 'closed'){
+            if ($model->status == 'closed') {
                 $model->closed_timestamp = date('Y:m:d H:m:s');
             }
-            if($model->save()){
-                Yii::$app->session->setFlash('success', 'บันรายการเรียบร้อย');                
-            }else {
-                Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');       
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'บันรายการเรียบร้อย');
+            } else {
+                Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');
             }
         }
-       
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
-            'dataProvider' => $dataprovider,
+                    'model' => $this->findModel($id),
+                    'dataProvider' => $dataprovider,
         ]);
     }
-    
-     public function actionAlldetails($id)
-    {
-      
-        $dataprovider = SaleorderDetails::find()->where(['saleorders_id'=> $id])->all();
+
+    public function actionAlldetails($id) {
+
+        $dataprovider = SaleorderDetails::find()->where(['saleorders_id' => $id])->all();
         //$model = \app\models\Users::find()->where('id = :id',['id'=>$id])->all();
-       
+
         return $this->render('alldetails', [
-            'model' => $this->findModel($id),
-            'dataProvider' => $dataprovider,
+                    'model' => $this->findModel($id),
+                    'dataProvider' => $dataprovider,
         ]);
     }
-    
-    public function actionMemberlist($id)
-    {
-      
+
+    public function actionMemberlist($id) {
+
         $dataProvider = new SqlDataProvider([
-                'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+            'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
                          INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id)                         
                          WHERE users_id = :uid 
                          AND saleorders.status IN ('open')
                          GROUP BY saleorders.id
                          ORDER BY saleorders.id DESC",
-                'params' => [':uid' => $id],
-            ]);
+            'params' => [':uid' => $id],
+        ]);
         $model = Users::findIdentity($id);
         //die(print_r($model));
         return $this->render('memberlist', [
-            'users' => $model,
-            'dataProvider' => $dataProvider,
+                    'users' => $model,
+                    'dataProvider' => $dataProvider,
         ]);
     }
-    
-    public function actionDetails($id)
-    {
-      
-        $dataprovider = SaleorderDetails::find()->where(['saleorders_id'=> $id])->all();
-        $model = $this->findModel($id);        
-              
+
+    public function actionReserve() {
+        if (Yii::$app->user->identity->role == "seller") {
+            $dataProvider = new SqlDataProvider([
+                'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+                         FROM saleorders 
+                         INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id)                         
+                         WHERE users_id = :uid 
+                         AND saleorders.status IN ('reserve')
+                         GROUP BY saleorders.id
+                         ORDER BY saleorders.id DESC",
+                'params' => [':uid' => Yii::$app->user->identity->id],
+            ]);
+        } else if (Yii::$app->user->identity->role == "buyers") {
+            $dataProvider = new SqlDataProvider([
+                'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+                         FROM saleorders 
+                         INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id)                         
+                         WHERE buyers = :uid 
+                         AND saleorders.status IN ('reserve')
+                         GROUP BY saleorders.id
+                         ORDER BY saleorders.id DESC",
+                'params' => [':uid' => Yii::$app->user->identity->id],
+            ]);
+        }
+        //$model = Users::findIdentity($id);
+        //die(print_r($model));
+        return $this->render('reserve', [
+                    //'model' => $model,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    public function actionDetails($id) {
+
+        $dataprovider = SaleorderDetails::find()->where(['saleorders_id' => $id])->all();
+        $model = $this->findModel($id);
+
+        if ($model->load(Yii::$app->request->post())) {
+            $model->buyers = Yii::$app->user->identity->id;
+            $model->status = 'reserve';
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'บันรายการเรียบร้อย');
+            } else {
+                Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');
+            }
+        }
+
+
         return $this->render('details', [
-            'model' => $this->findModel($id),
-            'dataProvider' => $dataprovider,
+                    'model' => $this->findModel($id),
+                    'dataProvider' => $dataprovider,
         ]);
     }
 
@@ -168,15 +233,14 @@ class SaleordersController extends Controller
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
-    public function actionCreate()
-    {
+    public function actionCreate() {
         $model = new Saleorders();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->renderAjax('create', [
-                'model' => $model,
+                        'model' => $model,
             ]);
         }
     }
@@ -187,27 +251,26 @@ class SaleordersController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionUpdate($id)
-    {
+    public function actionUpdate($id) {
         $model = $this->findModel($id);
         $transection = Yii::$app->db->beginTransaction;
         if ($model->load(Yii::$app->request->post())) {
-            
-            if($model->status == 'closed'){
+
+            if ($model->status == 'closed') {
                 $model->closed_timestamp = date('Y:m:d H:m:s');
             }
-            if($model->save()){
+            if ($model->save()) {
                 $transection->commit();
-                Yii::$app->session->setFlash('success', 'บันรายการเรียบร้อย');                
-            }else {
+                Yii::$app->session->setFlash('success', 'บันรายการเรียบร้อย');
+            } else {
                 $transection->rollBack();
-                Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');       
+                Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');
             }
         }
-        
+
         return $this->render('index', [
-                'model' => $model,
-            ]);
+                    'model' => $model,
+        ]);
     }
 
     /**
@@ -216,26 +279,22 @@ class SaleordersController extends Controller
      * @param integer $id
      * @return mixed
      */
-    public function actionDelete($id)
-    {
+    public function actionDelete($id) {
         $transaction = Yii::$app->db->transaction;
         //$flag = 0;
         $delete = SaleorderDetails::deleteAll('saleorders_id = :id', [':id' => $id]);
-        if($delete){
-                        
+        if ($delete) {
+
             $this->findModel($id)->delete();
             //die();
             $transaction->commit();
-            Yii::$app->session->setFlash('success', 'ลบรายการเรียบร้อย');            
+            Yii::$app->session->setFlash('success', 'ลบรายการเรียบร้อย');
             return $this->redirect(['saleorders/index']);
-        }else{
+        } else {
             Yii::$app->session->setFlash('error', 'ไม่สามารถทำรายการได้');
             $transaction->rollBack();
             return $this->redirect(['saleorders/index']);
         }
-        
-        
-        
     }
 
     /**
@@ -245,12 +304,12 @@ class SaleordersController extends Controller
      * @return Saleorders the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
-    protected function findModel($id)
-    {
+    protected function findModel($id) {
         if (($model = Saleorders::findOne($id)) !== null) {
             return $model;
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
 }

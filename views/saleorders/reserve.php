@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\grid\GridView;
 use yii\bootstrap\Modal;
 use yii\helpers\Url;
+use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-
-$this->title = 'รายการขายสินค้า';
+$this->title = 'รายการสั่งซื้อของคุณ : '.Yii::$app->user->identity->username;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <section class="content">
@@ -18,28 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="row">
                 <div class="col-md-12">  
 
-                    <p>
-                        <?php
-                        if (Yii::$app->user->identity->role != "buyer") {
-                            echo Html::a('ประกาศขายสินค้า', ['baskets/index'], ['class' => 'btn btn-success']);
-                        }
-                        ?>
-                    </p>
-
-                    <?php
-                    /* ใช้งาน popup
-                      modal::begin([
-                      'header'=>'<h4>เพิ่มรายการสินค้า</h4>',
-                      'id'=>'modalOrder',
-                      'size'=>'modal-lg',
-                      ]);
-
-                      echo "<div id='orderContent'></div>";
-
-                      modal::end();
-                     * 
-                     */
-                    ?>
                     <?=
                     GridView::widget([
                         'dataProvider' => $dataProvider,
@@ -68,6 +46,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => 'ราคารวม',
                                 'attribute' => 'total_price',
                                 'filter' => FALSE, //กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
+                                //'value' => 'total_price',
                                 'value' => function ($data) {
                                     return $data['total_price'] . " บาท";
                                 }
@@ -93,12 +72,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => '',
                                 'format' => 'raw',
                                 'value' => function ($data) {
-                                    return Html::a('รายละเอียด', ['saleorders/view', 'id' => $data['id']],['class'=>'btn-sm btn-info']);
+                                    return Html::a('รายละเอียด', ['saleorders/reservedetail', 'id' => $data['id']], ['class' => 'btn-sm btn-info']);
                                 },
                             ],
                         /*
-
-                          ['class' => 'yii\grid\ActionColumn'],
+                          [
+                          'class' => 'yii\grid\ActionColumn',
+                          'buttonOptions'=>['class'=>'btn btn-default'],
+                          'template'=>'<div class="btn-group btn-group-sm text-center" role="group"> {view}{delete} </div>',
+                          ],
                          * 
                          */
                         ],

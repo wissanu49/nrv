@@ -43,9 +43,10 @@ class Saleorders extends \yii\db\ActiveRecord
             [['post_timestamp'], 'safe'],
             [['status'], 'string'],
             [['total_price'], 'number'],
-            [['users_id'], 'integer'],
+            [['users_id','buyers'], 'integer'],
             [['closed_timestamp'], 'string', 'max' => 45],
             [['users_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['users_id' => 'id']],
+            [['buyers'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['buyers' => 'id']],
         ];
     }
 
@@ -61,7 +62,8 @@ class Saleorders extends \yii\db\ActiveRecord
             'status' => 'สถานะ',
             'closed_timestamp' => 'ปิดการขายเมื่อ',
             'total_price' => 'ราคารวม / บาท',
-            'users_id' => 'โดย',
+            'users_id' => 'ผู้ขาย',
+            'buyers' => 'ผู้ซื้อ'
         ];
     }
 

@@ -28,6 +28,17 @@ class SiteController extends Controller {
                         'actions' => ['logout', 'index', 'error'],
                         'allow' => true,
                         'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (Yii::$app->user->identity->role === 'admin' || Yii::$app->user->identity->role === 'buyer' || Yii::$app->user->identity->role === 'seller') {
+                                return true;
+                            }
+                            return false;
+                        },
+                    ],
+                    [
+                        'actions' => ['logout', 'error'],
+                        'allow' => true,
+                        'roles' => ['@'],
                     ],
                 ],
             ],
@@ -63,6 +74,8 @@ class SiteController extends Controller {
     public function actionIndex() {
         if (Yii::$app->user->identity->role == "manager") {
             return $this->redirect('reports/index');
+        } else if (Yii::$app->user->identity->role == "seller") {
+            return $this->redirect('saleorders/index');
         } else {
             $dataProvider = new SqlDataProvider([
                 'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  

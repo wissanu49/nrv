@@ -8,7 +8,7 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
-$this->title = 'รายการขายสินค้า';
+$this->title = 'ลงประกาศขาย';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <section class="content">
@@ -68,6 +68,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => 'ราคารวม',
                                 'attribute' => 'total_price',
                                 'filter' => FALSE, //กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
+                                //'value' => 'total_price',
                                 'value' => function ($data) {
                                     return $data['total_price'] . " บาท";
                                 }
@@ -93,12 +94,15 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => '',
                                 'format' => 'raw',
                                 'value' => function ($data) {
-                                    return Html::a('รายละเอียด', ['saleorders/view', 'id' => $data['id']],['class'=>'btn-sm btn-info']);
+                                    return Html::a('รายละเอียด', ['saleorders/view', 'id' => $data['id']], ['class' => 'btn-sm btn-info']);
                                 },
                             ],
                         /*
-
-                          ['class' => 'yii\grid\ActionColumn'],
+                          [
+                          'class' => 'yii\grid\ActionColumn',
+                          'buttonOptions'=>['class'=>'btn btn-default'],
+                          'template'=>'<div class="btn-group btn-group-sm text-center" role="group"> {view}{delete} </div>',
+                          ],
                          * 
                          */
                         ],

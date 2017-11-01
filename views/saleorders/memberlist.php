@@ -55,27 +55,33 @@ $this->params['breadcrumbs'][] = $users->firstname . ' ' . $users->lastname;
                                     'label' => 'รายการรวม',
                                     'attribute' => 'amount',
                                     'filter' => FALSE, //กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
-                                    'value' => 'amount',
+                                    'value' => function ($data) {
+                                        return $data['amount'] . " รายการ";
+                                    }
                                 ],
                                 [
                                     'label' => 'ราคารวม',
                                     'attribute' => 'total_price',
                                     'filter' => FALSE, //กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
-                                    'value' => 'total_price',
+                                    'value' => function ($data) {
+                                        return $data['total_price'] . " บาท";
+                                    }
                                 ],
                                 [
                                     'label' => 'สถานะ',
                                     'format' => 'raw',
                                     //'attribute' => 'status',
-                                    //'filter' => FALSE,//กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
+                                    'filter' => FALSE, //กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
                                     //'value' => 'status',
                                     'value' => function ($data) {
-                                        if ($data['status'] == "open") {
-                                            return Html::button('OPEN', ['class' => 'btn btn-success btn-sm']);
-                                        } else if ($data['status'] == "closed") {
-                                            return Html::button('CLOSED', ['class' => 'btn btn-danger btn-sm']);
-                                        } else {
-                                            return Html::button('OTHER', ['class' => 'btn btn-info btn-sm']);
+                                        if ($data['status'] == 'open') {
+                                            return Html::a('ประกาศขาย', '', ['class' => 'btn-sm btn-success']);
+                                        } else if ($data['status'] == 'closed') {
+                                            return Html::a('ปิดการขาย', '', ['class' => 'btn-sm btn-danger']);
+                                        } else if ($data['status'] == 'reserve') {
+                                            return Html::a('จอง', '', ['class' => 'btn-sm btn-warnning']);
+                                        } else if ($data['status'] == 'cancel') {
+                                            return Html::a('ยกเลิก', '', ['class' => 'btn-sm btn-info']);
                                         }
                                     }
                                 ],
@@ -83,7 +89,7 @@ $this->params['breadcrumbs'][] = $users->firstname . ' ' . $users->lastname;
                                     'label' => '',
                                     'format' => 'raw',
                                     'value' => function ($data) {
-                                        return Html::a('รายละเอียด', ['saleorders/details', 'id' => $data['id']], ['class' => 'btn btn-info', 'id' => 'DetailsButton']);
+                                        return Html::a('รายละเอียด', ['saleorders/details', 'id' => $data['id']], ['class' => 'btn-sm btn-info', 'id' => 'DetailsButton']);
                                         //return Html::button('รายละเอียด', ['id' => 'DetailsButton', 'href' => \yii\helpers\Url::to(['saleorders/details/' . $data['id']]), 'class' => 'btn btn-info']);
                                     },
                                 ],
