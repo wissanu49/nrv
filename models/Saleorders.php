@@ -56,6 +56,7 @@ class Saleorders extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
+            'garbage_types' => 'ประเภทขยะ',
             'post_timestamp' => 'ลงประกาศเมื่อ',
             'status' => 'สถานะ',
             'closed_timestamp' => 'ปิดการขายเมื่อ',
@@ -78,6 +79,14 @@ class Saleorders extends \yii\db\ActiveRecord
     public function getSaleorderDetails()
     {
         return $this->hasMany(SaleorderDetails::className(), ['saleorders_id' => 'id']);
+    }
+    
+    /**
+     * @return \yii\db\ActiveQuery
+     */
+    public function getGarbageTypes()
+    {
+        return $this->hasMany(Saleorders::className(), ['garbage_types' => 'id']);
     }
 
     /**

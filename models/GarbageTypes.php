@@ -13,21 +13,19 @@ use Yii;
  *
  * @property Garbages[] $garbages
  */
-class GarbageTypes extends \yii\db\ActiveRecord
-{
+class GarbageTypes extends \yii\db\ActiveRecord {
+
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
+    public static function tableName() {
         return 'garbage_types';
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
-    {
+    public function rules() {
         return [
             [['type_name'], 'string', 'max' => 250],
             [['type_description'], 'string', 'max' => 300],
@@ -37,20 +35,24 @@ class GarbageTypes extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public function attributeLabels()
-    {
+    public function attributeLabels() {
         return [
             'id' => 'ID',
-            'type_name' => 'Type Name',
-            'type_description' => 'Type Description',
+            'type_name' => 'ประเภทขยะ',
+            'type_description' => 'รายละเอียด',
         ];
     }
 
     /**
      * @return \yii\db\ActiveQuery
      */
-    public function getGarbages()
-    {
+    public function getGarbages() {
         return $this->hasMany(Garbages::className(), ['garbage_types_id' => 'id']);
     }
+
+    public function getGarbageTypeName($id) {
+        $get = GarbageTypes::find()->select(['type_name'])->where('id=:id', [':id' => $id])->one();
+        return $get;
+    }
+
 }

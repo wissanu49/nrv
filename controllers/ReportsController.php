@@ -51,7 +51,25 @@ class ReportsController extends Controller {
      */
     public function actionIndex() {
         
-        return $this->render('index');
+        if(\Yii::$app->request->post()){
+            $dataProvider = new \yii\data\SqlDataProvider([
+                'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+                         FROM saleorders 
+                         INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) 
+                         AND saleorders.status NOT IN('cancel','closed')
+                         GROUP BY saleorders.id
+                         ORDER BY saleorders.id DESC",
+            ]);
+            return $this->render('index',[
+                'dataProvider' => $dataProvider,
+                'post'=>TRUE,
+            ]);
+        }else{
+            return $this->render('index',[
+                'post'=>false,
+            ]);
+        }
+        
     }
 
 }

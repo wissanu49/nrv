@@ -93,6 +93,12 @@ class Garbages extends \yii\db\ActiveRecord
         return $get;
     }
     
+    public function getGarbageType($id)
+    {
+        $get = Garbages::find()->select(['garbage_types_id'])->where('id=:id',[':id'=>$id])->one();
+        return $get;
+    }
+    
     public function getGarbagePrice($id)
     {
         $get = Garbages::find()->select(['price'])->where('id=:id',[':id'=>$id])->one();

@@ -28,8 +28,8 @@ class Baskets extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['id', 'garbages_id', 'amount', 'users_id'], 'required'],
-            [['id', 'garbages_id', 'users_id'], 'integer'],
+            [['id','garbage_types', 'garbages_id', 'amount', 'users_id'], 'required'],
+            [['id','garbages_id', 'users_id'], 'integer'],
             [['amount'], 'number'],
             [['session'],'string', 'max' => 50],
             [['garbages_id'], 'exist', 'skipOnError' => true, 'targetClass' => Garbages::className(), 'targetAttribute' => ['garbages_id' => 'id']],
@@ -44,7 +44,8 @@ class Baskets extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'garbages_id' => 'สินค้า',
+            'garbage_types' => 'ประเภทขยะ',
+            'garbages_id' => 'ชนิดขยะ',
             'amount' => 'จำนวน',
             'users_id' => 'Users ID',
             'session' => 'SESSION ID',

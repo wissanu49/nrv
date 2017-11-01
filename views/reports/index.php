@@ -46,7 +46,7 @@ $this->registerJs($script);
             <?php //echo $this->render('_search', ['model' => $searchModel]);  ?>
         </div>
         <div class="box-body">
-            <div class="col-md-3">    
+            <div class="col-md-4">    
                 <h4>ระบุช่วงเวลาและข้อมูลที่ต้องการ</h4>
                 <?php $form = ActiveForm::begin(); ?>
 
@@ -69,32 +69,51 @@ $this->registerJs($script);
                 <!--
                 <div class="form-group">
                     <label>สิ้นสุดวันที่</label>
-                    <?php /*
-                    DatePicker::widget([
-                        'name' => 'end_date',
-                        'value' => '',
-                        'template' => '{addon}{input}',
-                        'clientOptions' => [
-                            'autoclose' => true,
-                            'format' => 'yyyy-m-d'
-                        ]
-                    ]);
-                     * 
-                     */
-                    ?>
+                <?php /*
+                  DatePicker::widget([
+                  'name' => 'end_date',
+                  'value' => '',
+                  'template' => '{addon}{input}',
+                  'clientOptions' => [
+                  'autoclose' => true,
+                  'format' => 'yyyy-m-d'
+                  ]
+                  ]);
+                 * 
+                 */
+                ?>
                 </div>
                 -->
                 <div class="form-group">
-                    <label>รายการ</label>
-                    <?= Html::dropDownList('list', null,['open'=>'OPEN','closed'=>'CLOSED'],['class'=>'form-control','prompt'=>'-- LIST --']) ?>                   
+                    <label>ข้อมูล</label>
+                    <?= Html::radioList('list', FALSE, ['garbages' => 'รายการสินค้า', 'users' => 'สมาชิก'], ['class' => 'form-control']); ?>
                 </div>
 
                 <div class="form-group">
-                <?= Html::submitButton(' ดึงข้อมูล ', ['class' => 'btn btn-success']) ?>
+                    <label>สถานะรายการ</label>
+                    <?= Html::radioList('status', FALSE, ['open' => 'ประกาศขาย', 'closed' => 'ปิดการขาย', 'reserv' => 'จอง', 'cancel' => 'ยกเลิก'], ['class' => 'form-control']); ?>                  
+                </div>                
+
+                <div class="form-group">
+                    <?= Html::submitButton(' ดึงข้อมูล ', ['class' => 'btn btn-success']) ?>
                 </div>
 
-<?php ActiveForm::end(); ?>
+                <?php ActiveForm::end(); ?>
 
+            </div>
+
+
+            <div class="col-md-8">
+                <?php
+                if ($post==TRUE) {
+                    echo GridView::widget([
+                        'dataProvider' => $dataProvider,
+                        'columns' => [
+                            ['class' => 'yii\grid\SerialColumn'],
+                        ],
+                    ]);
+                }
+                ?>
             </div>
         </div>
     </div>
