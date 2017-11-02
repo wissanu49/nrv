@@ -25,7 +25,7 @@ class SaleordersController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'update', 'delete', 'create', 'memberlist', 'selling'],
+                'only' => ['index', 'update', 'delete', 'create', 'memberlist', 'selling','reserving'],
                 'rules' => [
                     [
                         'actions' => ['index', 'update', 'delete', 'create'],
@@ -39,7 +39,7 @@ class SaleordersController extends Controller {
                         },
                     ],
                     [
-                        'actions' => ['selling', 'memberlist'],
+                        'actions' => ['selling', 'memberlist','reserving'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -105,6 +105,7 @@ class SaleordersController extends Controller {
             'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
                          INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) 
+                         WHERE status = 'open' 
                          GROUP BY saleorders.id
                          ORDER BY saleorders.id DESC",
         ]);
@@ -200,6 +201,25 @@ class SaleordersController extends Controller {
         }
         //$model = Users::findIdentity($id);
         //die(print_r($model));
+        return $this->render('reserve', [
+                    //'model' => $model,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
+    
+    public function actionReserving() {
+        
+            $dataProvider = new SqlDataProvider([
+                'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+                         FROM saleorders 
+                         INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id)                         
+                         WHERE buyers = :uid 
+                         AND saleorders.status IN ('closed','reserve')
+                         GROUP BY saleorders.id
+                         ORDER BY saleorders.id DESC",
+                'params' => [':uid' => Yii::$app->user->identity->id],
+            ]);
+       
         return $this->render('reserve', [
                     //'model' => $model,
                     'dataProvider' => $dataProvider,

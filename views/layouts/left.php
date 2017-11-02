@@ -61,7 +61,7 @@
                         'items' => [
                             ['label' => 'เมนูหลัก', 'options' => ['class' => 'header']],
                             ['label' => 'ประกาศขาย', 'icon' => 'file-code-o', 'url' => ['site/']],
-                            ['label' => 'รายการซื้อ', 'icon' => 'file-code-o', 'url' => ['site/']],
+                            ['label' => 'รายการซื้อ', 'icon' => 'file-code-o', 'url' => ['saleorders/reserving']],
                             ['label' => 'ข้อมูลส่วนตัว', 'icon' => 'user', 'url' => ['/users/update', 'id' => Yii::$app->user->identity->id]],
                             ['label' => 'ออกจากระบบ', 'icon' => 'power-off', 'url' => ['site/logout'], 'template' => '<a href="{url}" data-method="post">{icon} {label}</a>'],
                         ],

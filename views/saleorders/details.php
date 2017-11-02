@@ -17,64 +17,82 @@ $this->params['breadcrumbs'][] = $model->id;
         <div class="box-body">
 
             <div class="row">
-                <div class="col-md-12">  
+                <div class="col-md-12">
 
-                    <div class="box-body no-padding">
+                    <div class="col-md-4">
                         <table class="table table-condensed">
                             <tr>
-                                <th style="width: 10px">#</th>
-                                <th>รายการ</th>
-                                <th  style="text-align: right;">ราคา/หน่วย</th>
-                                <th  style="text-align: right;">จำนวน</th>
-                                <th  style="text-align: right;">ราคา</th>
-
+                                <td><strong>ผู้ประกาศขาย</strong></td>
+                                <td><?= $model->users->firstname . ' ' . $model->users->lastname ?></td>
                             </tr>
-                            <?php
-                            $i = 0;
-                            $sum = 0;
-                            foreach ($dataProvider as $cart) {
-                                $gb_unit = Garbages::getUnitsId($cart->garbages_id);
-                                $gb_name = Garbages::getGarbageName($cart->garbages_id);
-                                $gb_price = Garbages::getGarbagePrice($cart->garbages_id);
-                                $unit = Units::getUnitname($gb_unit->units_id);
+                            <tr>
+                                <td><strong>ที่อยู่</strong></td>
+                                <td><?= app\models\Users::getAddress($model->users_id) ?></td>
+                            </tr>
+                        </table>
+                    </div>
 
-                                $total = $gb_price->price * $cart->amount;
-                                $sum = $sum + $total;
-                                ?>
+                    <div class="col-md-8">
+                        <div class="box-body no-padding">
+                           
+                            
+                            <table class="table table-condensed">
                                 <tr>
-                                    <td><?= $i + 1 ?>.</td>
-                                    <td><?= $gb_name->garbage_name ?></td>
-                                    <td  style="text-align: right;"><?= $gb_price->price ?> บาท</td>
-                                    <td  style="text-align: right;"><?= $cart->amount ?>&nbsp;<?= $unit->unit_name; ?></td>
-                                    <td style="text-align: right;"><?= $total ?> บาท</td>
-
+                                    <th style="width: 10px">#</th>
+                                    <th>รายการ</th>
+                                    <th  style="text-align: right;">ราคา/หน่วย</th>
+                                    <th  style="text-align: right;">จำนวน</th>
+                                    <th  style="text-align: right;">ราคา</th>
 
                                 </tr>
                                 <?php
-                                $i++;
-                            }
-                            ?>
-                            <tr>
-                                <td colspan="5"></td>                                 
-                            </tr>
-                            <tr>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td>&nbsp;</td>
-                                <td colspan="2" style="text-align: right;"><b>รวม</b> &nbsp;&nbsp;<?= $sum ?>&nbsp;บาท</td>                                 
-                            </tr>
-                        </table>
-                        <?php 
-                        if($model->status == "open"){
-                        $form = ActiveForm::begin(); ?>
-                        <?= $form->field($model, 'id')->hiddenInput()->label(false) ?>
-                        <?php echo \yii\helpers\Html::a(' ย้อนกลับ ', Yii::$app->request->referrer, ['class' => 'btn btn-info']); ?>
-                        <?php echo Html::submitButton(' ติดต่อซื้อ ', ['class' => 'btn btn-warning']); ?>
-                        <?php 
-                        ActiveForm::end(); 
-                        }
-                        ?>  
+                                $i = 0;
+                                $sum = 0;
+                                foreach ($dataProvider as $cart) {
+                                    $gb_unit = Garbages::getUnitsId($cart->garbages_id);
+                                    $gb_name = Garbages::getGarbageName($cart->garbages_id);
+                                    $gb_price = Garbages::getGarbagePrice($cart->garbages_id);
+                                    $unit = Units::getUnitname($gb_unit->units_id);
 
+                                    $total = $gb_price->price * $cart->amount;
+                                    $sum = $sum + $total;
+                                    ?>
+                                    <tr>
+                                        <td><?= $i + 1 ?>.</td>
+                                        <td><?= $gb_name->garbage_name ?></td>
+                                        <td  style="text-align: right;"><?= $gb_price->price ?> บาท</td>
+                                        <td  style="text-align: right;"><?= $cart->amount ?>&nbsp;<?= $unit->unit_name; ?></td>
+                                        <td style="text-align: right;"><?= $total ?> บาท</td>
+
+
+                                    </tr>
+                                    <?php
+                                    $i++;
+                                }
+                                ?>
+                                <tr>
+                                    <td colspan="5"></td>                                 
+                                </tr>
+                                <tr>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td>&nbsp;</td>
+                                    <td colspan="2" style="text-align: right;"><b>รวม</b> &nbsp;&nbsp;<?= $sum ?>&nbsp;บาท</td>                                 
+                                </tr>
+                            </table>
+                            <?php
+                            if ($model->status == "open") {
+                                $form = ActiveForm::begin();
+                                ?>
+                                <?= $form->field($model, 'id')->hiddenInput()->label(false) ?>
+                                <?php echo \yii\helpers\Html::a(' ย้อนกลับ ', Yii::$app->request->referrer, ['class' => 'btn btn-info']); ?>
+                                <?php echo Html::submitButton(' ติดต่อซื้อ ', ['class' => 'btn btn-warning']); ?>
+                                <?php
+                                ActiveForm::end();
+                            }
+                            ?>  
+
+                        </div>
                     </div>
                 </div>
 

@@ -81,7 +81,7 @@ class SiteController extends Controller {
                 'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
                          INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) 
-                         AND saleorders.status NOT IN('cancel','closed')
+                         AND saleorders.status IN ('open')
                          GROUP BY saleorders.id
                          ORDER BY saleorders.id DESC",
             ]);

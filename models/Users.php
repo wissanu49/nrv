@@ -4,6 +4,7 @@ namespace app\models;
 
 use Yii;
 use yii\web\NotFoundHttpException;
+use yii\web\View;
 //use yii\base\NotSupportedException;
 
 /**
@@ -201,10 +202,28 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface
     
     public function getFullname($id)
     {
-        $profile = self::find()->where(['id'=>$id])->one();
+        $profile = Users::find()->where(['id'=>$id])->one();
         if ($profile !==null){
-            $this->fullname = $profile->firstname." ".$profile->lastname;
-            echo $this->fullname;
+            $fullname = $profile->firstname." ".$profile->lastname;
+            echo $fullname;
+        }
+        //return false;
+    }
+    public function Fullname($id)
+    {
+        $profile = Users::find()->where(['id'=>$id])->one();
+        if ($profile !==null){
+            $fullname = $profile->firstname." ".$profile->lastname;
+            return $fullname;
+        }
+        //return false;
+    }
+    public function getAddress($id)
+    {
+        $profile = Users::find()->where(['id'=>$id])->one();
+        if ($profile !==null){
+            $address = $profile->address." ต.".$profile->sub_district." อ.".$profile->district." จ.".$profile->province." มือถือ ".$profile->mobile;
+            echo $address;
         }
         //return false;
     }

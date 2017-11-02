@@ -8,7 +8,8 @@ use yii\web\View;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
-$this->title = 'รายการสั่งซื้อของคุณ : '.Yii::$app->user->identity->username;
+$fullname = app\models\Users::Fullname(Yii::$app->user->identity->id);
+$this->title = 'รายการสั่งซื้อของคุณ : '.$fullname;
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <section class="content">
@@ -72,7 +73,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'label' => '',
                                 'format' => 'raw',
                                 'value' => function ($data) {
-                                    return Html::a('รายละเอียด', ['saleorders/reservedetail', 'id' => $data['id']], ['class' => 'btn-sm btn-info']);
+                                    return Html::a('รายละเอียด', ['saleorders/view', 'id' => $data['id']], ['class' => 'btn-sm btn-info']);
                                 },
                             ],
                         /*
