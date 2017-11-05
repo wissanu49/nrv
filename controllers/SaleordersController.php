@@ -25,7 +25,7 @@ class SaleordersController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'update', 'delete', 'create', 'memberlist', 'selling','reserving'],
+                'only' => ['index', 'update', 'delete', 'create', 'memberlist', 'selling','reserving','closed','buy'],
                 'rules' => [
                     [
                         'actions' => ['index', 'update', 'delete', 'create'],
@@ -39,7 +39,7 @@ class SaleordersController extends Controller {
                         },
                     ],
                     [
-                        'actions' => ['selling', 'memberlist','reserving'],
+                        'actions' => ['selling', 'memberlist','reserving','closed','buy'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -115,6 +115,22 @@ class SaleordersController extends Controller {
                     'dataProvider' => $dataProvider,
         ]);
     }
+    
+    public function actionClosed() {
+        $dataProvider = new SqlDataProvider([
+            'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+                         FROM saleorders 
+                         INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) 
+                         WHERE status = 'closed' 
+                         GROUP BY saleorders.id
+                         ORDER BY saleorders.id DESC",
+        ]);
+
+
+        return $this->render('closed', [
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
 
     /**
      * Displays a single Saleorders model.
@@ -128,7 +144,7 @@ class SaleordersController extends Controller {
 
 
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->status == 'closed') {
+            if ($model->status == 'closed' || $model->status == 'cancel' ) {
                 $model->closed_timestamp = date('Y:m:d H:m:s');
             }
             if ($model->save()) {
@@ -225,6 +241,25 @@ class SaleordersController extends Controller {
                     'dataProvider' => $dataProvider,
         ]);
     }
+    
+    public function actionBuy() {
+        
+            $dataProvider = new SqlDataProvider([
+                'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+                         FROM saleorders 
+                         INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id)                         
+                         WHERE buyers = :uid 
+                         AND saleorders.status IN ('closed')
+                         GROUP BY saleorders.id
+                         ORDER BY saleorders.id DESC",
+                'params' => [':uid' => Yii::$app->user->identity->id],
+            ]);
+       
+        return $this->render('buy', [
+                    //'model' => $model,
+                    'dataProvider' => $dataProvider,
+        ]);
+    }
 
     public function actionDetails($id) {
 
@@ -234,6 +269,7 @@ class SaleordersController extends Controller {
         if ($model->load(Yii::$app->request->post())) {
             $model->buyers = Yii::$app->user->identity->id;
             $model->status = 'reserve';
+            $model->reserve_timestamp = date('Y:m:d H:m:s');
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'บันรายการเรียบร้อย');
             } else {

@@ -7,8 +7,8 @@ return [
     'password' => 'em8A0Q1r1w', //em8A0Q1r1w
     'charset' => 'utf8',
 ];
-*/
 
+*/
 return [
     'class' => 'yii\db\Connection',
     'dsn' => 'mysql:host=localhost;dbname=nrv', //	garbagen_nrv

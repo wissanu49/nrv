@@ -23,24 +23,25 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <div class="col-md-4">
 
-                        <?php $form = ActiveForm::begin(); ?>
+<?php $form = ActiveForm::begin(); ?>
 
                         <div class="form-group">
                             <label class="control-label">ผู้ประกาศขาย</label>                        
 
-                            <?= Html::textInput('user', $model->users->firstname . ' ' . $model->users->lastname, ['class' => 'form-control', 'readonly' => 'readonly']); ?>
+<?= Html::textInput('user', $model->users->firstname . ' ' . $model->users->lastname, ['class' => 'form-control', 'readonly' => 'readonly']); ?>
                         </div>
                         <div class="form-group">
                             <label class="control-label">ที่อยู่</label>                        
 
-                            <?= Html::textInput('address', $model->users->address . ' ต.' . $model->users->sub_district . ' อ.' . $model->users->district . ' จ.' . $model->users->province . ' มือถือ ' . $model->users->mobile, ['class' => 'form-control', 'readonly' => 'readonly']); ?>
+<?= Html::textInput('address', $model->users->address . ' ต.' . $model->users->sub_district . ' อ.' . $model->users->district . ' จ.' . $model->users->province . ' มือถือ ' . $model->users->mobile, ['class' => 'form-control', 'readonly' => 'readonly']); ?>
                         </div>
 
                         <?= $form->field($model, 'post_timestamp')->textInput(['readonly' => true]) ?>
-
-                        <?= $form->field($model, 'status')->dropDownList(['open' => 'เปิดการขาย', 'closed' => 'ปิดการขาย', 'reserve' => 'จอง', 'cancel' => 'ยกเลิกการขาย',], ['prompt' => 'สถานะ', 'disabled' => $model->status == 'closed' ? TRUE : FALSE]) ?>
-
-
+                        <?php if (Yii::$app->user->identity->id == $model->id) { ?>
+                            <?= $form->field($model, 'status')->dropDownList(['open' => 'เปิดการขาย', 'closed' => 'ปิดการขาย', 'reserve' => 'จอง', 'cancel' => 'ยกเลิกการขาย',], ['prompt' => 'สถานะ', 'disabled' => $model->status == 'closed' ? TRUE : FALSE]) ?>
+                        <?php } else { ?>
+                            <?= $form->field($model, 'status')->dropDownList(['open' => 'เปิดการขาย', 'closed' => 'ปิดการขาย', 'reserve' => 'จอง', 'cancel' => 'ยกเลิกการขาย',], ['prompt' => 'สถานะ', 'disabled' => TRUE]) ?>
+                            <?php } ?>
                         <div class="form-group">
                             <?php echo \yii\helpers\Html::a(' ย้อนกลับ ', Yii::$app->request->referrer, ['class' => 'btn btn-info']); ?>
                             <?php
@@ -60,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             ?>
                         </div>
 
-                        <?php ActiveForm::end(); ?>               
+<?php ActiveForm::end(); ?>               
                         <br>
                     </div>
                     <div class="col-md-8">
@@ -71,14 +72,14 @@ $this->params['breadcrumbs'][] = $this->title;
                             <table class="table table-condensed">
                                 <tr>
                                     <td style="text-align: left;"><strong>ผู้จอง</strong></td>
-                                    <td style="text-align: left;"><?=  app\models\Users::getFullname($model->buyers) ?></td>
+                                    <td style="text-align: left;"><?= app\models\Users::getFullname($model->buyers) ?></td>
                                 </tr>
                                 <tr>
                                     <td><strong>ที่อยู่</strong></td>
-                                    <td><?=  app\models\Users::getAddress($model->buyers) ?></td>
+                                    <td><?= app\models\Users::getAddress($model->buyers) ?></td>
                                 </tr>
                             </table>
-                        <?php } ?>
+<?php } ?>
 
                         <div class="box-body no-padding">
                             <table class="table table-condensed">

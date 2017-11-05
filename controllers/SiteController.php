@@ -25,7 +25,7 @@ class SiteController extends Controller {
                 'only' => ['logout', 'index', 'error'],
                 'rules' => [
                     [
-                        'actions' => ['logout', 'index', 'error'],
+                        'actions' => ['logout','error'],
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
@@ -36,7 +36,7 @@ class SiteController extends Controller {
                         },
                     ],
                     [
-                        'actions' => ['logout', 'error'],
+                        'actions' => ['logout', 'error' ,'index'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],

@@ -69,7 +69,7 @@ $this->params['breadcrumbs'][] = $this->title;
 
                     <div class="form-group">
                         <label>ประเภทรายงาน</label>
-                        <?= Html::radioList('status', FALSE, ['open' => 'ประกาศขาย', 'closed' => 'รายการที่มีผู้ซื้อ', 'reserve' => 'จอง', 'cancel' => 'ยกเลิก'], ['class' => 'form-control']); ?>                  
+                        <?= Html::radioList('status', FALSE, ['closed' => 'รายการซื้อ', 'reserve' => 'รายการจอง'], ['class' => 'form-control']); ?>                  
                     </div>                
 
                     <div class="form-group">
@@ -88,14 +88,10 @@ $this->params['breadcrumbs'][] = $this->title;
                     if ($post == TRUE) {
                         echo "<div align=\"center\">";
                         echo "<p><h3>รายงานใบงาน </b>";
-                        if ($status == 'open') {
-                            echo "รายการที่ยังไม่มีผู้ซื้อ";
-                        } else if ($status == 'closed') {
-                            echo "รายการที่มีผู้ซื้อแล้ว";
+                        if ($status == 'closed') {
+                            echo "รายการซื้อ";
                         } else if ($status == 'reserve') {
                             echo "รายการที่มีการจอง";
-                        } else if ($status == 'cancel') {
-                            echo "รายการที่ยกเลิก";
                         }
                         echo "<br>ระหว่างวันที่ <b>$date_from</b> ถึงวันที่ <b>$date_to</h3></p>";
                         echo "</div>";
@@ -152,15 +148,7 @@ $this->params['breadcrumbs'][] = $this->title;
                                         return $fullname;
                                     },
                                 ],
-                                [
-                                    'label' => 'ผู้ซื้อ',
-                                    'attribute' => 'buyers',
-                                    'filter' => FALSE, //กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
-                                    'value' => function($data) {
-                                        $fullname = \app\models\Users::Fullname($data['buyers']);
-                                        return $fullname;
-                                    },
-                                ]
+                                
                             ],
                         ]);
                     }
