@@ -51,7 +51,7 @@ $this->title = 'ลงทะเบียนเข้าใช้งาน';
 
 <?= $form->field($model, 'mobile')->textInput(['maxlength' => true]) ?>
 
-                                <?= $form->field($model, 'role')->dropDownList(['seller' => 'รับซื้อ', 'buyer' => 'ลงประกาศขาย'], ['prompt' => 'ประเภทสมาชิก']) ?>
+                                <?= $form->field($model, 'role')->dropDownList(['seller' => 'ลงประกาศขาย', 'buyer' => 'รับซื้อ'], ['prompt' => 'ประเภทสมาชิก']) ?>
 
                             <div class="form-group">
                             <?= Html::submitButton(' ลงทะเบียน ', ['class' => 'btn btn-primary']) ?>

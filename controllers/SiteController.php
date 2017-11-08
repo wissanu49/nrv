@@ -25,20 +25,18 @@ class SiteController extends Controller {
                 'only' => ['logout', 'index', 'error'],
                 'rules' => [
                     [
-                        'actions' => ['logout','error'],
+                        'actions' => ['index','error','logout', 'error'],
                         'allow' => true,
                         'roles' => ['@'],
+                        /*
                         'matchCallback' => function ($rule, $action) {
                             if (Yii::$app->user->identity->role === 'admin' || Yii::$app->user->identity->role === 'buyer' || Yii::$app->user->identity->role === 'seller') {
                                 return true;
                             }
                             return false;
                         },
-                    ],
-                    [
-                        'actions' => ['logout', 'error' ,'index'],
-                        'allow' => true,
-                        'roles' => ['@'],
+                         * */
+                         
                     ],
                 ],
             ],
