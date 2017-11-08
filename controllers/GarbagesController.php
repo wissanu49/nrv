@@ -22,7 +22,7 @@ class GarbagesController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'update', 'delete', 'create','pricelist'],
+                'only' => ['index', 'update', 'delete', 'create', 'pricelist'],
                 'rules' => [
                     [
                         'actions' => ['index', 'update', 'delete', 'create'],
@@ -35,7 +35,7 @@ class GarbagesController extends Controller {
                             return FALSE;
                         },
                     ],
-                                 [
+                    [
                         'actions' => ['pricelist'],
                         'allow' => true,
                         'roles' => ['@'],
@@ -64,7 +64,7 @@ class GarbagesController extends Controller {
                     'dataProvider' => $dataProvider,
         ]);
     }
-    
+
     public function actionPricelist() {
         $searchModel = new GarbagesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

@@ -32,7 +32,7 @@
                                    // ['label' => 'ประกาศขาย', 'icon' => 'dot-circle-o', 'url' => ['/saleorders/selling']],
                                     ['label' => 'รายการทั้งหมด', 'icon' => 'reorder', 'url' => ['/saleorders/index']],
                                     ['label' => 'รายการสินค้า', 'icon' => 'folder-open', 'url' => ['/garbages']],
-                                    ['label' => 'หน่วยนับ', 'icon' => 'folder-o', 'url' => ['/units']],
+                                    ['label' => 'หน่วยนับ', 'icon' => 'folder-o', 'url' => ['/units/index']],
                                     ['label' => 'รายงาน', 'icon' => 'bar-chart', 'url' => ['/reports']],
                                     ['label' => 'สมาชิก', 'icon' => 'users', 'url' => ['/users']],
                                 ]
