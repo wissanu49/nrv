@@ -30,9 +30,9 @@ class UnitsController extends Controller {
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
                             if (Yii::$app->user->identity->role === 'admin') {
-                                return TRUE;
+                                return true;
                             }
-                            return FALSE;
+                            return false;
                         },
                     ],
                 ],

@@ -62,7 +62,7 @@
                             ['label' => 'เมนูหลัก', 'options' => ['class' => 'header']],
                             ['label' => 'ประกาศขาย', 'icon' => 'clone', 'url' => ['site/']],
                             ['label' => 'รายการจอง', 'icon' => 'book', 'url' => ['saleorders/reserving']],
-                            ['label' => 'รายการซื้อ', 'icon' => 'dot-circle-o', 'url' => ['saleorders/buying']],
+                            ['label' => 'รายการซื้อ', 'icon' => 'dot-circle-o', 'url' => ['saleorders/buy']],
                             ['label' => 'รายงาน', 'icon' => 'bar-chart', 'url' => ['/reports/buyer']],
                             ['label' => 'ข้อมูลส่วนตัว', 'icon' => 'user', 'url' => ['/users/update', 'id' => Yii::$app->user->identity->id]],
                             ['label' => 'ออกจากระบบ', 'icon' => 'power-off', 'url' => ['site/logout'], 'template' => '<a href="{url}" data-method="post">{icon} {label}</a>'],

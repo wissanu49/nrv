@@ -25,7 +25,7 @@ class SaleordersController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'update', 'delete', 'create', 'memberlist', 'selling','reserving','closed','buy'],
+                'only' => ['index', 'update', 'delete', 'create', 'memberlist', 'selling', 'reserving', 'closed', 'buy'],
                 'rules' => [
                     [
                         'actions' => ['index', 'update', 'delete', 'create'],
@@ -39,7 +39,18 @@ class SaleordersController extends Controller {
                         },
                     ],
                     [
-                        'actions' => ['selling', 'memberlist','reserving','closed','buy'],
+                        'actions' => ['reserving', 'buy'],
+                        'allow' => true,
+                        'roles' => ['@'],
+                        'matchCallback' => function ($rule, $action) {
+                            if (Yii::$app->user->identity->role === 'buyer') {
+                                return true;
+                            }
+                            return false;
+                        },
+                    ],
+                    [
+                        'actions' => ['selling', 'memberlist', 'closed'],
                         'allow' => true,
                         'roles' => ['@'],
                     ],
@@ -115,7 +126,7 @@ class SaleordersController extends Controller {
                     'dataProvider' => $dataProvider,
         ]);
     }
-    
+
     public function actionClosed() {
         $dataProvider = new SqlDataProvider([
             'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
@@ -144,7 +155,7 @@ class SaleordersController extends Controller {
 
 
         if ($model->load(Yii::$app->request->post())) {
-            if ($model->status == 'closed' || $model->status == 'cancel' ) {
+            if ($model->status == 'closed' || $model->status == 'cancel') {
                 $model->closed_timestamp = date('Y:m:d H:m:s');
             }
             if ($model->save()) {
@@ -222,39 +233,39 @@ class SaleordersController extends Controller {
                     'dataProvider' => $dataProvider,
         ]);
     }
-    
+
     public function actionReserving() {
-        
-            $dataProvider = new SqlDataProvider([
-                'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
                          INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id)                         
                          WHERE buyers = :uid 
                          AND saleorders.status IN ('closed','reserve')
                          GROUP BY saleorders.id
                          ORDER BY saleorders.id DESC",
-                'params' => [':uid' => Yii::$app->user->identity->id],
-            ]);
-       
+            'params' => [':uid' => Yii::$app->user->identity->id],
+        ]);
+
         return $this->render('reserve', [
                     //'model' => $model,
                     'dataProvider' => $dataProvider,
         ]);
     }
-    
+
     public function actionBuy() {
-        
-            $dataProvider = new SqlDataProvider([
-                'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+
+        $dataProvider = new SqlDataProvider([
+            'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
                          INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id)                         
                          WHERE buyers = :uid 
                          AND saleorders.status IN ('closed')
                          GROUP BY saleorders.id
                          ORDER BY saleorders.id DESC",
-                'params' => [':uid' => Yii::$app->user->identity->id],
-            ]);
-       
+            'params' => [':uid' => Yii::$app->user->identity->id],
+        ]);
+
         return $this->render('buy', [
                     //'model' => $model,
                     'dataProvider' => $dataProvider,
