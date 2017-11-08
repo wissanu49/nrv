@@ -89,16 +89,19 @@ class UnitsController extends Controller {
                 //$transection->rollBack();
             }
         }
+        /*
+          if (Yii::$app->request->isAjax) {
+          return $this->renderAjax('create', [
+          'model' => $model,
+          ]);
+          } else {
 
-        if (Yii::$app->request->isAjax) {
-            return $this->renderAjax('create', [
-                        'model' => $model,
-            ]);
-        } else {
-            return $this->render('create', [
-                        'model' => $model,
-            ]);
-        }
+         * 
+         */
+        return $this->render('create', [
+                    'model' => $model,
+        ]);
+        //}
     }
 
     /**
@@ -111,7 +114,8 @@ class UnitsController extends Controller {
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            //return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['units/index']);
         } else {
             return $this->render('update', [
                         'model' => $model,

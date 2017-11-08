@@ -13,10 +13,8 @@ use yii\widgets\ActiveForm;
         <div class="box-header with-border">
 
             <h3 class="box-title"><?php Html::encode($this->title) ?></h3>
-            <?php //echo $this->render('_search', ['model' => $searchModel]);  ?>
         </div>
         <div class="box-body">
-            <div class="row">
                 <div class="col-md-3">
                     <?php $form = ActiveForm::begin(); ?>
 
@@ -31,7 +29,5 @@ use yii\widgets\ActiveForm;
                     <?php ActiveForm::end(); ?>
                 </div>
             </div>
-
-        </div>
     </div>
 </section>

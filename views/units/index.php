@@ -16,6 +16,7 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 
 <?php
+/*
 modal::begin([
     'header' => '<h4>สร้างรายการใหม่</h4>',
     'id' => 'modal',
@@ -35,6 +36,8 @@ $script = <<< JS
 JS;
 
 $this->registerJs($script);
+ * 
+ */
 ?>
 
 <section class="content">
@@ -48,7 +51,8 @@ $this->registerJs($script);
             <?php // echo $this->render('_search', ['model' => $searchModel]);  ?>
 
             <p>
-                <?= Html::button('เพิ่มรายการใหม่', ['value' => Url::to('units/create'), 'class' => 'btn btn-success', 'id' => 'createunit']) ?>
+                <?= Html::a('เพิ่มรายการใหม่', ['create'], ['class' => 'btn btn-success', 'id'=>'create-garbage'])   ?>
+                <?php // Html::button('เพิ่มรายการใหม่', ['value' => Url::to('units/create'), 'class' => 'btn btn-success', 'id' => 'createunit']) ?>
             </p>
             <?=
             GridView::widget([
