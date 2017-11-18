@@ -30,9 +30,9 @@
                             //    'template' => '<a href="{url}" ><i class="fa fa-tv"></i>{label}<i class="fa fa-angle-left pull-right"></i></a>',
                             //    'items' => [
                                    // ['label' => 'ประกาศขาย', 'icon' => 'dot-circle-o', 'url' => ['/saleorders/selling']],
-                                    ['label' => 'รายการทั้งหมด', 'icon' => 'reorder', 'url' => ['/saleorders/index']],
+                                    ['label' => 'รายการทั้งหมด', 'icon' => 'reorder', 'url' => ['/saleorders']],
                                     ['label' => 'รายการสินค้า', 'icon' => 'folder-open', 'url' => ['/garbages']],
-                                    ['label' => 'หน่วยนับ', 'icon' => 'folder-o', 'url' => ['/units/index']],
+                                    ['label' => 'หน่วยนับ', 'icon' => 'folder-o', 'url' => ['/units']],
                                     ['label' => 'รายงาน', 'icon' => 'bar-chart', 'url' => ['/reports']],
                                     ['label' => 'สมาชิก', 'icon' => 'users', 'url' => ['/users']],
                              //   ]

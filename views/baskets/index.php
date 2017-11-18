@@ -7,6 +7,7 @@ use yii\helpers\ArrayHelper;
 use app\models\Garbages;
 use app\models\GarbageTypes;
 use app\models\Units;
+use app\models\Baskets;
 use yii\helpers\Url;
 use app\models\DepdropGarbageTypes;
 use kartik\depdrop\DepDrop;
@@ -15,6 +16,7 @@ $this->title = 'เพิ่มรายการขายสินค้า';
 $this->params['breadcrumbs'][] = $this->title;
 
 $session = Yii::$app->session;
+
 ?>
 <section class="content">
     <div class="box">
@@ -23,12 +25,13 @@ $session = Yii::$app->session;
             <div class="row">
                 <div class="col-md-3">  
                     <h4>เลือกรายการ</h4>
-
+                    
                     <?php $form = ActiveForm::begin(); ?>
                     <?php // Html::dropDownList('garbages_type',NULL, ArrayHelper::map(GarbageTypes::find()->all(), 'id', 'type_name'),['prompt' => 'เลือกประเภท','id'=>'type-id', 'class'=>'form-control']) ?>
-                    <?= $form->field($model, 'garbage_types')->dropDownList(ArrayHelper::map(GarbageTypes::find()->all(), 'id', 'type_name'),['prompt' => 'เลือกประเภท','id'=>'type-id']) ?>
-                    <?= $form->field($model, 'garbages_id')->widget(DepDrop::className(), [
-                        'pluginOptions' => [                            
+                    <?= $form->field($model, 'garbage_types')->dropDownList(ArrayHelper::map(GarbageTypes::find()->all(), 'id', 'type_name'), ['prompt' => 'เลือกประเภท', 'id' => 'type-id']) ?>
+                    <?=
+                    $form->field($model, 'garbages_id')->widget(DepDrop::className(), [
+                        'pluginOptions' => [
                             //'depends' => [Html::getInputId($model, 'garbage_types')],
                             'depends' => ['type-id'],
                             'placeholder' => 'เลือกชนิดขยะ',
@@ -37,20 +40,20 @@ $session = Yii::$app->session;
                     ])
                     ?>
 
-                    <?php //$form->field($model, 'garbages_id')->dropDownList(ArrayHelper::map(Garbages::find()->all(), 'id', 'garbage_name')) ?>
+                    <?php //$form->field($model, 'garbages_id')->dropDownList(ArrayHelper::map(Garbages::find()->all(), 'id', 'garbage_name'))  ?>
 
-                        <?= $form->field($model, 'amount')->textInput() ?>
-                        <?php // $form->field($model, 'users_id')->textInput() ?>
+                    <?= $form->field($model, 'amount')->textInput() ?>
+<?php // $form->field($model, 'users_id')->textInput()  ?>
 
                     <div class="form-group">
-                    <?= Html::submitButton(' เพิ่ม ', ['class' => 'btn btn-success']) ?>
+<?= Html::submitButton(' เพิ่ม ', ['class' => 'btn btn-success']) ?>
                     </div>
 
-                    <?php ActiveForm::end(); ?>
+<?php ActiveForm::end(); ?>
                 </div>
                 <div class="col-md-9">  
                     <h4>รายการสินค้า</h4>
-<?php //Yii::$app->session->getId() ?>
+<?php //Yii::$app->session->getId()  ?>
                     <div class="box">
                         <!-- /.box-header -->
                         <div class="box-body no-padding">
@@ -83,14 +86,14 @@ $session = Yii::$app->session;
                                         <td><?= $cart->amount ?>&nbsp;<?= $unit->unit_name; ?></td>
 
                                         <td>                                      
-                                    <?= Html::a('x', ['/baskets/removeitem', 'id' => $cart->id], ['class' => 'btn btn-danger']) ?>
+    <?= Html::a('x', ['/baskets/removeitem', 'id' => $cart->id], ['class' => 'btn btn-danger']) ?>
                                         </td>
 
                                     </tr>
-    <?php
-    $i++;
-}
-?>
+                                    <?php
+                                    $i++;
+                                }
+                                ?>
                             </table>
 
                         </div>

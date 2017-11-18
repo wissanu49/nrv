@@ -67,10 +67,11 @@ class SiteController extends Controller {
      * @return string
      */
     public function actionIndex() {
+        
         if (Yii::$app->user->identity->role == "manager") {
             return $this->redirect('reports/index');
         } else if (Yii::$app->user->identity->role == "seller") {
-            return $this->redirect('saleorders/index');
+            return $this->redirect('saleorders');
         } else {
             $dataProvider = new SqlDataProvider([
                 'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  

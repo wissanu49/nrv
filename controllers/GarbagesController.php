@@ -29,10 +29,10 @@ class GarbagesController extends Controller {
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                            if (Yii::$app->user->identity->role === 'admin') {
-                                return TRUE;
+                            if (Yii::$app->user->identity->role == 'admin') {
+                                return true;
                             }
-                            return FALSE;
+                            return false;
                         },
                     ],
                     [
@@ -95,16 +95,16 @@ class GarbagesController extends Controller {
     public function actionCreate() {
         $model = new Garbages();
         $model->setScenario('create');
-        $transection = \Yii::$app->db->transaction;
+         $transection = Yii::$app->db->beginTransaction();
         if ($model->load(Yii::$app->request->post())) {
             Yii::$app->session->garbagelastID = $model->id;
             if ($model->save()) {
                 Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
-                //$transection->commit();
+                $transection->commit();
                 //return $this->redirect(['view', 'id' => $model->id, 'units_id' => $model->units_id]);
             } else {
                 Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');
-                //$transection->rollBack();
+                $transection->rollBack();
             }
         }
         if (Yii::$app->request->isAjax) {
@@ -127,7 +127,7 @@ class GarbagesController extends Controller {
      */
     public function actionUpdate($id, $units_id) {
         $model = $this->findModel($id, $units_id);
-        $transection = Yii::$app->db->transaction;
+         $transection = Yii::$app->db->beginTransaction();
         if ($model->load(Yii::$app->request->post())) {
             if ($model->save()) {
                 $transection->commit();
@@ -153,7 +153,7 @@ class GarbagesController extends Controller {
      * @return mixed
      */
     public function actionDelete($id, $units_id) {
-        $transection = \Yii::$app->db->transaction;
+         $transection = Yii::$app->db->beginTransaction();
 
         if ($this->findModel($id, $units_id)->delete()) {
             Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');

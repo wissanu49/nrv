@@ -30,9 +30,9 @@ class SaleordersController extends Controller {
                     [
                         'actions' => ['index', 'update', 'delete', 'create'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        //'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                            if (Yii::$app->user->identity->role === 'admin' || Yii::$app->user->identity->role === 'seller') {
+                            if (Yii::$app->user->identity->role == 'admin' || Yii::$app->user->identity->role == 'seller') {
                                 return true;
                             }
                             return false;
@@ -41,9 +41,9 @@ class SaleordersController extends Controller {
                     [
                         'actions' => ['reserving', 'buy'],
                         'allow' => true,
-                        'roles' => ['@'],
+                        //'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                            if (Yii::$app->user->identity->role === 'buyer') {
+                            if (Yii::$app->user->identity->role == 'buyer') {
                                 return true;
                             }
                             return false;
@@ -75,36 +75,50 @@ class SaleordersController extends Controller {
             //    'query' => Saleorders::find()->select(['saleorders.*','COUNT(saleorder_details.id) AS cnt'])->innerJoin('saleorder_details', 'saleorders.id = saleorder_details.saleorders_id' )->orderBy(['saleorders.id'=>SORT_DESC]),
             //]);            
 
-            $dataProvider = new SqlDataProvider([
-                'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+            //$dataProvider = new SqlDataProvider([
+                $sql = "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
                          INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) 
                          GROUP BY saleorders.id
-                         ORDER BY saleorders.id DESC",
-                'params' => [':uid' => Yii::$app->user->identity->id],
+                         ORDER BY saleorders.id DESC";
+                //'params' => [':uid' => Yii::$app->user->identity->id],
+            //]);
+                $dataProvider = new SqlDataProvider([
+                'sql' => $sql,
+                //'params' => [':uid' => Yii::$app->user->identity->id],
             ]);
-        } else if (Yii::$app->user->identity->role == "buyer") {
-            $dataProvider = new SqlDataProvider([
-                'sql' => "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+        }
+        if (Yii::$app->user->identity->role == "buyer") {
+            //$dataProvider = new SqlDataProvider([
+                $sql = "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
                          INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) 
                          AND saleorders.status NOT IN('cancel','closed')
                          GROUP BY saleorders.id
-                         ORDER BY saleorders.id DESC",
+                         ORDER BY saleorders.id DESC";
+                //'params' => [':uid' => Yii::$app->user->identity->id],
+            //]);
+                $dataProvider = new SqlDataProvider([
+                'sql' => $sql,
                 'params' => [':uid' => Yii::$app->user->identity->id],
             ]);
-        } else {
-            $dataProvider = new SqlDataProvider([
-                'sql' => 'SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
+        } 
+        if(Yii::$app->user->identity->role == "seller"){
+            //$dataProvider = new SqlDataProvider([
+                $sql = "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
                          INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id)                         
                          WHERE users_id = :uid 
                          GROUP BY saleorders.id
-                         ORDER BY saleorders.id DESC',
+                         ORDER BY saleorders.id DESC";
+                //"params' => [':uid' => Yii::$app->user->identity->id],
+            //]);
+                $dataProvider = new SqlDataProvider([
+                'sql' => $sql,
                 'params' => [':uid' => Yii::$app->user->identity->id],
             ]);
         }
-
+        
 
         return $this->render('index', [
                     'dataProvider' => $dataProvider,
@@ -320,7 +334,8 @@ class SaleordersController extends Controller {
      */
     public function actionUpdate($id) {
         $model = $this->findModel($id);
-        $transection = Yii::$app->db->beginTransaction;
+         $transection = Yii::$app->db->beginTransaction();
+        
         if ($model->load(Yii::$app->request->post())) {
 
             if ($model->status == 'closed') {
@@ -347,19 +362,18 @@ class SaleordersController extends Controller {
      * @return mixed
      */
     public function actionDelete($id) {
-        $transaction = Yii::$app->db->transaction;
+         $transection = Yii::$app->db->beginTransaction();
         //$flag = 0;
         $delete = SaleorderDetails::deleteAll('saleorders_id = :id', [':id' => $id]);
         if ($delete) {
-
             $this->findModel($id)->delete();
             //die();
-            $transaction->commit();
+           $transection->commit();
             Yii::$app->session->setFlash('success', 'ลบรายการเรียบร้อย');
             return $this->redirect(['saleorders/index']);
         } else {
             Yii::$app->session->setFlash('error', 'ไม่สามารถทำรายการได้');
-            $transaction->rollBack();
+            $transection->rollBack();
             return $this->redirect(['saleorders/index']);
         }
     }

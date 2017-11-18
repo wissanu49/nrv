@@ -17,10 +17,10 @@ class Baskets extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
-    public static function tableName()
-    {
-        return 'baskets';
-    }
+    //public static function tableName()
+    //{
+    //    return 'baskets';
+    //}
 
     /**
      * @inheritdoc
@@ -29,11 +29,12 @@ class Baskets extends \yii\db\ActiveRecord
     {
         return [
             [['id','garbage_types', 'garbages_id', 'amount', 'users_id'], 'required'],
-            [['id','garbages_id', 'garbage_types', 'users_id'], 'integer'],
+            [['id','garbages_id', 'users_id'], 'integer'],
             [['amount'], 'number'],
-            [['session'],'string', 'max' => 50],
-            [['garbages_id'], 'exist', 'skipOnError' => true, 'targetClass' => Garbages::className(), 'targetAttribute' => ['garbages_id' => 'id']],
-            [['users_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['users_id' => 'id']],
+            [['session', 'garbage_types'],'string', 'max' => 50],
+            
+            //[['garbages_id'], 'exist', 'skipOnError' => true, 'targetClass' => Garbages::className(), 'targetAttribute' => ['garbages_id' => 'id']],
+            //[['users_id'], 'exist', 'skipOnError' => true, 'targetClass' => Users::className(), 'targetAttribute' => ['users_id' => 'id']],
         ];
     }
 

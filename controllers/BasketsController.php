@@ -28,10 +28,10 @@ class BasketsController extends Controller {
                         'allow' => true,
                         'roles' => ['@'],
                         'matchCallback' => function ($rule, $action) {
-                            if (Yii::$app->user->identity->role === 'buyer') {
-                                return FALSE;
+                            if (Yii::$app->user->identity->role == 'admin' || Yii::$app->user->identity->role == 'seller') {
+                                return true;
                             }
-                            return TRUE;
+                            return false;
                         },
                     ],
                 ],
@@ -46,17 +46,17 @@ class BasketsController extends Controller {
     }
 
     public function actionIndex() {
+     
+            $flag = 0;
+            $model = new Baskets();
+            $model->id = Baskets::find()->count('[[id]]');
 
-        $flag = 0;
-        $model = new Baskets();
-        $model->id = Baskets::find()->count('[[id]]');
+            $session = \Yii::$app->session;
+            $session['type'] = '';
+            $transection = Yii::$app->db->beginTransaction();
+            //die($model->id);
+            $dataprovider = Baskets::find()->where(['users_id' => Yii::$app->user->identity->id])->all();
 
-        $session = \Yii::$app->session;
-        $session['type'] = '';
-        $transaction = Yii::$app->db->beginTransaction();
-        //die($model->id);
-        $dataprovider = Baskets::find()->where(['users_id' => Yii::$app->user->identity->id])->all();
-        try {
             if (Yii::$app->request->post()) {
                 $model->load(Yii::$app->request->post());
                 
@@ -65,7 +65,7 @@ class BasketsController extends Controller {
                 $model->id = $model->id + 1;
                 if ($model->save()) {
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
-                    $transaction->commit();
+                    $transection->commit();
                 } else {
                     Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');
                 }
@@ -73,19 +73,16 @@ class BasketsController extends Controller {
                 $dataprovider = Baskets::find()->where(['users_id' => Yii::$app->user->identity->id])->all();
                 return $this->render('index', ['model' => $model, 'dataprovider' => $dataprovider]);
             }
-        } catch (Exception $ex) {
-            $transaction->rollBack();
-        }
 
-
-        return $this->render('index', ['model' => $model, 'dataprovider' => $dataprovider]);
+            return $this->render('index', ['model' => $model, 'dataprovider' => $dataprovider]);
+        
     }
 
     public function actionSavecart() {
 
         $basketsModel = Baskets::find()->where(['users_id' => Yii::$app->user->identity->id])->all();
 
-        $transaction = Yii::$app->db->beginTransaction();
+        $transection = Yii::$app->db->beginTransaction();
         try {
             //Find out how many products have been submitted by the form
             //$count = count(Yii::$app->request->post('Baskets', []));
@@ -107,7 +104,7 @@ class BasketsController extends Controller {
                 $orderModel = new Saleorders();
                 $orderModel->id = Saleorders::find()->count('[[id]]');
                 $orderModel->id = $orderModel->id + 1;
-                $orderModel->garbage_types =  $_POST['Baskets']['garbage_types'];
+                $orderModel->garbage_types = $_POST['Baskets']['garbage_types'];
                 $orderModel->post_timestamp = date('Y:m:d H:m:s');
                 $orderModel->status = Saleorders::_STATUS_OPEN;
                 $orderModel->total_price = $_POST['Baskets']['summary'];
@@ -142,10 +139,10 @@ class BasketsController extends Controller {
 
                 if ($flag == 0) {
                     Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
-                    $transaction->commit();
+                    $transection->commit();
                     return $this->redirect(['saleorders/index']);
                 } else {
-                    $transaction->rollBack();
+                    $transection->rollBack();
                     return $this->redirect(['saleorders/index']);
                 }
             }
@@ -160,7 +157,7 @@ class BasketsController extends Controller {
               print_r($sub, $return);
               /*
               if(!$this->findModel($sub->id)->delete()){
-              $transaction->rollBack();
+              $transection->rollBack();
               }
              * 
 
@@ -168,14 +165,14 @@ class BasketsController extends Controller {
               }
 
               Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
-              $transaction->commit();
+              $transection->commit();
               return $this->redirect('index');
               }
              * 
              */
         } catch (Exception $ex) {
             Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');
-            $transaction->rollBack();
+            $transection->rollBack();
         }
 
         return $this->render('save_form', ['basketModel' => $basketsModel]);
@@ -199,21 +196,21 @@ class BasketsController extends Controller {
     }
 
     public function actionRemoveitem() {
-        $transaction = Yii::$app->db->beginTransaction();
+        $transection = Yii::$app->db->beginTransaction();
         try {
             if (Yii::$app->request->get()) {
                 $id = $_GET['id'];
 
                 if ($this->findModel($id)->delete()) {
                     Yii::$app->session->setFlash('success', 'ลบข้อมูลเรียบร้อย');
-                    $transaction->commit();
+                    $transection->commit();
                 } else {
                     Yii::$app->session->setFlash('error', 'เกิดข้อผิดพลาด');
                 }
             }
         } catch (Exception $ex) {
             Yii::$app->session->setFlash('error', $ex);
-            $transaction->rollBack();
+            $transection->rollBack();
         }
 
 

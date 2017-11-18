@@ -1,8 +1,11 @@
-Options -Indexes
-IndexIgnore */*
+#Options +FollowSymLinks
+#IndexIgnore /
+#Options -Indexes
+#IndexIgnore */*
 
 <IfModule mod_rewrite.c>
     Options +FollowSymlinks
+    IndexIgnore /
     RewriteEngine On
 
 	# no recursion
