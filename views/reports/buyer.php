@@ -106,7 +106,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <div class="row">
                 <div class="col-md-12">
                     <?php
-                    if ($post == TRUE) {
+                    if ($post == TRUE && $type_report == "") {
                         echo "<div align=\"center\">";
                         echo "<p><h3>รายงานใบงาน </b>";
                         if ($status == 'closed') {
@@ -168,6 +168,66 @@ $this->params['breadcrumbs'][] = $this->title;
                                         $fullname = \app\models\Users::Fullname($data['users_id']);
                                         return $fullname;
                                     },
+                                ],
+                                
+                            ],
+                        ]);
+                    }
+                    ?>
+                </div>
+            </div>
+            
+            <div class="row">
+                <div class="col-md-12">
+                    <?php
+                    if ($type_report != "") {
+                        echo "<div align=\"center\">";
+                        echo "<p><h3>รายงานใบงาน </b>";
+                        if ($status == 'closed') {
+                            echo "รายการซื้อ";
+                        } else if ($status == 'reserve') {
+                            echo "รายการที่มีการจอง";
+                        }
+                        echo "<br>ระหว่างวันที่ <b>$date_from</b> ถึงวันที่ <b>$date_to</h3></p>";
+                        echo "</div>";
+                        echo GridView::widget([
+                            'dataProvider' => $dataProvider,
+                            'columns' => [
+                                ['class' => 'yii\grid\SerialColumn'],
+                                [
+                                    'label' => 'ประเภท',
+                                    'attribute' => 'type_name ',
+                                    'filter' => FALSE, //กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
+                                    'value' => 'type_name' ,
+                                ],
+                                [
+                                    'label' => 'รายการสินค้า',
+                                    'attribute' => 'garbage_name',
+                                    'filter' => FALSE, //กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
+                                    'value' => 'garbage_name',
+                                ],                                
+                                [
+                                    'label' => 'จำนวน',
+                                    'attribute' => 'amount',
+                                    'filter' => FALSE, //กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
+                                    'value' => 'amount',
+                                ],
+                                [
+                                    'label' => 'สถานะ',
+                                    //'attribute' => 'status',
+                                    'format' => 'raw',
+                                    'filter' => FALSE, //กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
+                                    'value' => function ($data) {
+                                        if ($data['status'] == 'open') {
+                                            return Html::a('ประกาศขาย', '', ['class' => 'btn-sm btn-success']);
+                                        } else if ($data['status'] == 'closed') {
+                                            return Html::a('ปิดการขาย', '', ['class' => 'btn-sm btn-danger']);
+                                        } else if ($data['status'] == 'reserve') {
+                                            return Html::a('จอง', '', ['class' => 'btn-sm btn-warning']);
+                                        } else if ($data['status'] == 'cancel') {
+                                            return Html::a('ยกเลิก', '', ['class' => 'btn-sm btn-info']);
+                                        }
+                                    }
                                 ],
                                 
                             ],

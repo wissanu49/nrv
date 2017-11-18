@@ -62,7 +62,7 @@ $this->title = 'ลงทะเบียนเข้าใช้งาน';
                         </div>
                         <div class="col-md-5">
                             แผนที่
-                            <div class="map" style="width: 500px; height: 400px;">
+                            <div class="map" style="width: auto; height: 400px;">
 
                                 <?php
                                 echo \pigolab\locationpicker\LocationPickerWidget::widget([

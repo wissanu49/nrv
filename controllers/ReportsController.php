@@ -73,10 +73,10 @@ class ReportsController extends Controller {
     public function actionIndex() {
 
         if (Yii::$app->request->post()) {
-            
-            $date_from = $_POST['y']."-".$_POST['m']."-".$_POST['d'];
-            $date_to = $_POST['y2']."-".$_POST['m2']."-".$_POST['d2'];
-            
+
+            $date_from = $_POST['y'] . "-" . $_POST['m'] . "-" . $_POST['d'];
+            $date_to = $_POST['y2'] . "-" . $_POST['m2'] . "-" . $_POST['d2'];
+
             //if (isset($_POST['status']) && isset($_POST['date_from']) && isset($_POST['date_to'])) {
             if (isset($_POST['status']) && isset($_POST['d']) && isset($_POST['m']) && isset($_POST['y']) && isset($_POST['d2']) && isset($_POST['m2']) && isset($_POST['y2'])) {
                 if ($_POST['status'] == 'open') {
@@ -106,10 +106,10 @@ class ReportsController extends Controller {
                          AND saleorders.status IN (:status)
                          AND closed_timestamp BETWEEN :date_from AND :date_to";
                 }
-                
+
                 $sql .= "GROUP BY saleorders.id
                          ORDER BY saleorders.id DESC";
-                
+
                 $dataProvider = new \yii\data\SqlDataProvider([
                     'sql' => $sql,
                     //'params' => [':status' => $_POST['status'], ':date_from' => $_POST['date_from'], ':date_to' => $_POST['date_to']],
@@ -167,14 +167,14 @@ class ReportsController extends Controller {
                          AND saleorders.status IN (:status)
                          AND closed_timestamp BETWEEN :date_from AND :date_to";
                 }
-                
+
                 $sql .= "GROUP BY saleorders.id
                          ORDER BY saleorders.id DESC";
-                
+
                 $dataProvider = new \yii\data\SqlDataProvider([
                     'sql' => $sql,
                     //'params' => [':id'=> Yii::$app->user->identity->id,':status' => $_POST['status'], ':date_from' => $_POST['date_from'], ':date_to' => $_POST['date_to']],
-                    'params' => [':id'=> Yii::$app->user->identity->id,':status' => $_POST['status'], ':date_from' => $date_from, ':date_to' => $date_to],
+                    'params' => [':id' => Yii::$app->user->identity->id, ':status' => $_POST['status'], ':date_from' => $date_from, ':date_to' => $date_to],
                 ]);
                 return $this->render('seller', [
                             'dataProvider' => $dataProvider,
@@ -198,12 +198,22 @@ class ReportsController extends Controller {
     public function actionBuyer() {
 
         if (Yii::$app->request->post()) {
-            $date_from = $_POST['y']."-".$_POST['m']."-".$_POST['d'];
-            $date_to = $_POST['y2']."-".$_POST['m2']."-".$_POST['d2'];
-            
-             if (isset($_POST['status']) && isset($_POST['d']) && isset($_POST['m']) && isset($_POST['y']) && isset($_POST['d2']) && isset($_POST['m2']) && isset($_POST['y2'])) {
-            //if (isset($_POST['status']) && isset($_POST['date_from']) && isset($_POST['date_to'])) {
-                if ($_POST['status'] == 'open') {
+            $date_from = $_POST['y'] . "-" . $_POST['m'] . "-" . $_POST['d'];
+            $date_to = $_POST['y2'] . "-" . $_POST['m2'] . "-" . $_POST['d2'];
+
+            if (isset($_POST['status']) && isset($_POST['d']) && isset($_POST['m']) && isset($_POST['y']) && isset($_POST['d2']) && isset($_POST['m2']) && isset($_POST['y2'])) {
+                //if (isset($_POST['status']) && isset($_POST['date_from']) && isset($_POST['date_to'])) {
+                if (isset($_POST['types'])) {
+                    $sql = "SELECT saleorders.*, saleorder_details.amount, garbages.garbage_name, garbages.garbage_types_id , garbage_types.type_name
+                         FROM saleorders 
+                         INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) 
+                         INNER JOIN garbages ON (garbages.id = saleorder_details.garbages_id) 
+                         INNER JOIN garbage_types ON (garbage_types.id = garbages.garbage_types_id) 
+                         WHERE buyers = :id
+                         AND saleorders.status IN (:status)
+                         AND garbage_types.id = :types
+                         AND closed_timestamp BETWEEN :date_from AND :date_to";
+                } else if ($_POST['status'] == 'open') {
                     $sql = "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
                          INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) 
@@ -231,27 +241,17 @@ class ReportsController extends Controller {
                          WHERE buyers = :id
                          AND saleorders.status IN (:status)
                          AND closed_timestamp BETWEEN :date_from AND :date_to";
-                         
                 }
-                
-                if(isset($_POST['type'])){
-                    $sql = "SELECT saleorders.*,garbages.garbage_name, garbages.garbage_types_id , garbage_types.type_name
-                         FROM saleorders 
-                         INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) 
-                         INNER JOIN garbages ON (garbages.id = saleorder_details.garbages_id) 
-                         INNER JOIN garbage_types ON (garbage_types.id = garbages.garbage_types_id) 
-                         WHERE buyers = :id
-                         AND saleorders.status IN ('reserve')
-                         AND garbage_types.id = '".$_POST['type']."'";
-                }
-                
-                $sql .= "GROUP BY saleorders.id
+
+
+
+                $sql .= " GROUP BY saleorders.id
                          ORDER BY saleorders.id DESC";
-                
+
                 $dataProvider = new \yii\data\SqlDataProvider([
                     'sql' => $sql,
                     //'params' => [':id'=> Yii::$app->user->identity->id,':status' => $_POST['status'], ':date_from' => $_POST['date_from'], ':date_to' => $_POST['date_to']],
-                    'params' => [':id'=> Yii::$app->user->identity->id,':status' => $_POST['status'], ':date_from' => $date_from, ':date_to' => $date_to],
+                    'params' => [':id' => Yii::$app->user->identity->id, ':status' => $_POST['status'], ':date_from' => $date_from, ':date_to' => $date_to, ':types' => $_POST['types']],
                 ]);
                 return $this->render('buyer', [
                             'dataProvider' => $dataProvider,
@@ -259,15 +259,18 @@ class ReportsController extends Controller {
                             'status' => $_POST['status'],
                             'date_from' => $date_from, //$_POST['date_from'],
                             'date_to' => $date_to, // $_POST['date_to'],
+                            'type_report' => $_POST['types']
                 ]);
             } else {
                 return $this->render('buyer', [
                             'post' => false,
+                            'type_report' => false
                 ]);
             }
         } else {
             return $this->render('buyer', [
                         'post' => false,
+                        'type_report' => false
             ]);
         }
     }

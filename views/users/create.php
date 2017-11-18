@@ -54,8 +54,8 @@ $this->title = 'ลงทะเบียนผู้ใช้งานใหม�
                </div>
                  
                   <div class="col-md-6">    
-                 MAP
-                 <div class="map" style="width: 500px; height: 400px;">
+                 แผนที่
+                 <div class="map" style="width: auto; height: 400px;">
                      
                      <?php
                         echo \pigolab\locationpicker\LocationPickerWidget::widget([
