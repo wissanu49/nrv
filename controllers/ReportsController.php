@@ -107,7 +107,7 @@ class ReportsController extends Controller {
                          AND closed_timestamp BETWEEN :date_from AND :date_to";
                 }
 
-                $sql .= "GROUP BY saleorders.id
+                $sql .= " GROUP BY saleorders.id
                          ORDER BY saleorders.id DESC";
 
                 $dataProvider = new \yii\data\SqlDataProvider([

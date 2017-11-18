@@ -25,7 +25,7 @@ $session = Yii::$app->session;
                     <h4>เลือกรายการ</h4>
 
                     <?php $form = ActiveForm::begin(); ?>
-
+                    <?php // Html::dropDownList('garbages_type',NULL, ArrayHelper::map(GarbageTypes::find()->all(), 'id', 'type_name'),['prompt' => 'เลือกประเภท','id'=>'type-id', 'class'=>'form-control']) ?>
                     <?= $form->field($model, 'garbage_types')->dropDownList(ArrayHelper::map(GarbageTypes::find()->all(), 'id', 'type_name'),['prompt' => 'เลือกประเภท','id'=>'type-id']) ?>
                     <?= $form->field($model, 'garbages_id')->widget(DepDrop::className(), [
                         'pluginOptions' => [                            
