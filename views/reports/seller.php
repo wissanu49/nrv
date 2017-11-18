@@ -33,8 +33,23 @@ $this->params['breadcrumbs'][] = $this->title;
                     <?php $form = ActiveForm::begin(); ?>
 
                     <div class="form-group">
+                        <label>ช่วงเวลาเริ่มต้น</label>
+                        <?= Html::dropDownList('d',NULL, app\models\Reports::getDay(), ['prompt' => 'วันที่','class'=>'form-control']) ?>
+                        <?= Html::dropDownList('m',NULL, app\models\Reports::getMonth(), ['prompt' => 'เดือน','class'=>'form-control']) ?>
+                        <?= Html::dropDownList('y',NULL, app\models\Reports::getYear(), ['prompt' => 'ปี','class'=>'form-control']) ?>
+                    </div>
+                    
+                     <div class="form-group">
+                        <label>ช่วงเวลาสิ้นสุด</label>
+                        <?= Html::dropDownList('d2',NULL, app\models\Reports::getDay(), ['prompt' => 'วันที่','class'=>'form-control']) ?>
+                        <?= Html::dropDownList('m2',NULL, app\models\Reports::getMonth(), ['prompt' => 'เดือน','class'=>'form-control']) ?>
+                        <?= Html::dropDownList('y2',NULL, app\models\Reports::getYear(), ['prompt' => 'ปี','class'=>'form-control']) ?>
+                    </div>
+                    
+                    <!--
+                    <div class="form-group">
                         <label>ช่วงเวลา</label>
-                        <?=
+                        <?php /*
                         DateRangePicker::widget([
                             'name' => 'date_from',
                             'value' => '',
@@ -46,8 +61,11 @@ $this->params['breadcrumbs'][] = $this->title;
                                 'format' => 'yyyy-m-d'
                             ]
                         ]);
+                         * 
+                         */
                         ?>
                     </div>
+                    -->
                     <!--
                     <div class="form-group">
                         <label>สิ้นสุดวันที่</label>
@@ -73,7 +91,7 @@ $this->params['breadcrumbs'][] = $this->title;
                     </div>                
 
                     <div class="form-group">
-                        <?= Html::submitButton(' ดึงข้อมูล ', ['class' => 'btn btn-success']) ?>
+                        <?= Html::submitButton(' ดูรายงาน ', ['class' => 'btn btn-success']) ?>
                     </div>
 
                     <?php ActiveForm::end(); ?>

@@ -51,7 +51,23 @@ $this->title = 'หน้าหลัก';
 ?>
 <section class="content">
     <div class="row">
-        <div class="col-lg-6">
+        <div class="col-lg-12">
+            <div class="box">
+                <div class="box-header with-border">
+                    <h3>แผนที่ผู้ลงประกาศขาย</h3>
+                </div>
+                <div class="box-body"> 
+                    <?php
+                    echo $map->display();
+                    ?>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+
             <div class="box">
 
                 <div class="box-header with-border">
@@ -82,7 +98,7 @@ $this->title = 'หน้าหลัก';
                                 'value' => 'post_timestamp',
                             ],
                             [
-                                 'label' => 'จำนวนสินค้า',
+                                'label' => 'จำนวนสินค้า',
                                 'attribute' => 'amount',
                                 'filter' => FALSE, //กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
                                 'value' => function ($data) {
@@ -128,19 +144,6 @@ $this->title = 'หน้าหลัก';
                          */
                         ],
                     ]);
-                    ?>
-                </div>
-            </div>
-        </div>
-
-        <div class="col-lg-6">
-            <div class="box">
-                <div class="box-header with-border">
-                    <h3>แผนที่ผู้ลงประกาศขาย</h3>
-                </div>
-                <div class="box-body"> 
-                    <?php
-                    echo $map->display();
                     ?>
                 </div>
             </div>

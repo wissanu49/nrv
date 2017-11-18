@@ -20,7 +20,7 @@ use yii\web\JsExpression;
             <?= $form->field('', 'รายการ')->dropDownList([ 'seller' => 'ลงประกาศขาย', 'buyer' => 'รับซื้อ', 'admin' => 'ผู้ดูแลระบบ', 'manager' => 'ผู้บริหาร', ], ['prompt' => 'ประเภทสมาชิก']) ?>
 
             <div class="form-group">
-                <?= Html::submitButton(' ดึงข้อมูล ', ['class' => 'btn btn-success']) ?>
+                <?= Html::submitButton(' ดูรายงาน ', ['class' => 'btn btn-success']) ?>
             </div>
 
             <?php ActiveForm::end(); ?>

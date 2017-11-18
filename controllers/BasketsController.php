@@ -57,8 +57,9 @@ class BasketsController extends Controller {
         //die($model->id);
         $dataprovider = Baskets::find()->where(['users_id' => Yii::$app->user->identity->id])->all();
         try {
-            if ($model->load(Yii::$app->request->post())) {
-
+            if (Yii::$app->request->post()) {
+                $model->load(Yii::$app->request->post());
+                
                 $model->session = Yii::$app->session->getId();
                 $model->users_id = Yii::$app->user->identity->id;
                 $model->id = $model->id + 1;
