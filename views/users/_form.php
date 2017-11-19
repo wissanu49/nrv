@@ -27,11 +27,30 @@ use yii\web\JsExpression;
 
             <?= $form->field($model, 'address')->textInput(['maxlength' => true]) ?>
 
-            <?= $form->field($model, 'sub_district')->textInput(['maxlength' => true]) ?>
-
-            <?= $form->field($model, 'district')->textInput(['maxlength' => true]) ?>
-
-            <?= $form->field($model, 'province')->textInput(['maxlength' => true]) ?>
+           <?= $form->field($model, 'province')->dropDownList(ArrayHelper::map(Province::find()->all(), 'id', 'name'), ['prompt' => 'เลือกจังหวัด','id'=>'pv-id']) ?>
+                         
+                            <?=
+                            $form->field($model, 'district')->widget(DepDrop::className(), [
+                                'options' => ['id'=>'dt-id'],
+                                'pluginOptions' => [
+                                    //'depends' => [Html::getInputId($model, 'province')],
+                                    'depends' => ['pv-id'],
+                                    'placeholder' => 'เลือกอำเภอ',
+                                    'url' => Url::to(['districtlist'])
+                                ]
+                            ])
+                            ?>
+                            <?=
+                            $form->field($model, 'sub_district')->widget(DepDrop::className(), [
+                                'options' => ['id'=>'sdt-id'],
+                                'pluginOptions' => [
+                                    //'depends' => [Html::getInputId($model, 'district')],
+                                    'depends' => ['dt-id'],
+                                    'placeholder' => 'เลือกตำบล',
+                                    'url' => Url::to(['subdistrictlist'])
+                                ]
+                            ])
+                            ?>
 
             <?= $form->field($model, 'lattitude')->textInput(['maxlength' => true, 'readOnly' => true]) ?>
 

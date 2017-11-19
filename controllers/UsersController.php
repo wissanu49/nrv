@@ -10,6 +10,11 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
 use yii\web\UploadedFile;
+use app\models\District;
+use app\models\Province;
+use app\models\Subdistrict;
+use yii\helpers\Json;
+use yii\helpers\ArrayHelper;
 
 /**
  * UsersController implements the CRUD actions for Users model.
@@ -23,7 +28,7 @@ class UsersController extends Controller {
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['index', 'update', 'delete', 'create', 'uploadimg', 'changepwd'],
+                'only' => ['index', 'update', 'delete', 'create', 'uploadimg', 'changepwd', 'districtlist', 'subdistrictlist'],
                 'rules' => [
                     [
                         'actions' => ['index', 'delete', 'create'],
@@ -43,7 +48,7 @@ class UsersController extends Controller {
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['signup'],
+                        'actions' => ['signup', 'districtlist', 'subdistrictlist'],
                         'roles' => ['?', '@'],
                     ],
                 ],
@@ -55,6 +60,59 @@ class UsersController extends Controller {
                 ],
             ],
         ];
+    }
+
+    public function actionDistrictlist() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            //var_dump($parents);
+            if ($parents != null) {
+                $province_id = $parents[0];
+                foreach (District::find()->where(['province_id' => $province_id])->orderBy(['name' => SORT_ASC])->all() as $district) {
+                    $out[] = ['id' => $district->id, 'name' => $district->name];
+                }
+
+                echo Json::encode(['output' => $out, 'selected' => '']);
+                return;
+            }
+        }
+        echo Json::encode(['output' => '', 'selected' => '']);
+    }
+
+    protected function getDistrict($id) {
+        $datas = District::find()->where(['province_id' => $id])->all();
+        return $this->MapData($datas, 'id', 'name');
+    }
+    
+    protected function getSubDistrict($id) {
+        $datas = Subdistrict::find()->where(['district_id' => $id])->all();
+        return $this->MapData($datas, 'id', 'name');
+    }
+ 
+    protected function MapData($datas, $fieldId, $fieldName) {
+        $obj = [];
+        foreach ($datas as $key => $value) {
+            array_push($obj, ['id' => $value->{$fieldId}, 'name' => $value->{$fieldName}]);
+        }
+        return $obj;
+    }
+
+    public function actionSubdistrictlist() {
+        $out = [];
+        if (isset($_POST['depdrop_parents'])) {
+            $parents = $_POST['depdrop_parents'];
+            if ($parents != null) {
+                $subdistrict_id = $parents[0];
+                foreach (Subdistrict::find()->where(['district_id' => $subdistrict_id])->orderBy(['name' => SORT_ASC])->all() as $subdistrict) {
+                    $out[] = ['id' => $subdistrict->id, 'name' => $subdistrict->name];
+                }
+
+                echo Json::encode(['output' => $out, 'selected' => '']);
+                return;
+            }
+        }
+        echo Json::encode(['output' => '', 'selected' => '']);
     }
 
     /**
@@ -200,6 +258,9 @@ class UsersController extends Controller {
         $model = $this->findModel($id);
         $model->setScenario('updateProfile');
 
+        $district = ArrayHelper::map($this->getDistrict($model->province), 'id', 'name');
+        $subdistrict = ArrayHelper::map($this->getSubDistrict($model->district), 'id', 'name');
+        
         try {
             if ($model->load(Yii::$app->request->post()) && $model->save()) {
 
@@ -209,6 +270,8 @@ class UsersController extends Controller {
             } else {
                 return $this->render('update', [
                             'model' => $model,
+                            'district' => $district,
+                            'subdistrict' => $subdistrict,
                 ]);
             }
         } catch (Exception $e) {

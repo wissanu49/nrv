@@ -5,6 +5,7 @@ use yii\widgets\DetailView;
 use app\models\Garbages;
 use app\models\Units;
 use yii\bootstrap\ActiveForm;
+use yii\base\View;
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Saleorders */
@@ -12,6 +13,10 @@ use yii\bootstrap\ActiveForm;
 $this->title = "รายการขาย";
 $this->params['breadcrumbs'][] = ['label' => 'รายการขาย', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
+
+$subdistrict = app\models\Subdistrict::getSubDistrictName($model->users->sub_district);
+$district = \app\models\District::getDistrictName($model->users->district);
+$province = \app\models\Province::getProvinceName($model->users->province);
 ?>
 <section class="content">
     <div class="box">
@@ -33,7 +38,7 @@ $this->params['breadcrumbs'][] = $this->title;
                         <div class="form-group">
                             <label class="control-label">ที่อยู่</label>                        
 
-<?= Html::textInput('address', $model->users->address . ' ต.' . $model->users->sub_district . ' อ.' . $model->users->district . ' จ.' . $model->users->province . ' มือถือ ' . $model->users->mobile, ['class' => 'form-control', 'readonly' => 'readonly']); ?>
+<?= Html::textarea('address', $model->users->address . ' ต.' . $subdistrict . ' อ.' . $district . ' จ.' . $province . ' เบอร์ติดต่อ ' . $model->users->mobile, ['class' => 'form-control', 'readonly' => 'readonly']); ?>
                         </div>
 
                         <?= $form->field($model, 'post_timestamp')->textInput(['readonly' => true]) ?>
