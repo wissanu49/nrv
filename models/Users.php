@@ -221,6 +221,19 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
         }
         //return false;
     }
+    
+    public function getAddressUser($id) {
+        $profile = Users::find()->where(['id' => $id])->one();
+        $subdistrict = Subdistrict::getSubDistrictName($profile->sub_district);
+        $district = District::getDistrictName($profile->district);
+        $province = Province::getProvinceName($profile->province);
+        
+        if ($profile !== null) {
+            $address = $profile->address . " ต." . $subdistrict . " อ." . $district . " จ." . $province . " เบอร์ติดต่อ " . $profile->mobile;
+            return $address;
+        }
+        //return false;
+    }
 
     public function validateAuthKey($authKey) {
         return $this->authKey === $authKey;

@@ -168,8 +168,7 @@ class ReportsController extends Controller {
                          AND closed_timestamp BETWEEN :date_from AND :date_to";
                 }
 
-                $sql .= "GROUP BY saleorders.id
-                         ORDER BY saleorders.id DESC";
+                $sql .= "GROUP BY saleorders.id  ORDER BY saleorders.id DESC";
 
                 $dataProvider = new \yii\data\SqlDataProvider([
                     'sql' => $sql,
@@ -203,7 +202,7 @@ class ReportsController extends Controller {
 
             if (isset($_POST['status']) && isset($_POST['d']) && isset($_POST['m']) && isset($_POST['y']) && isset($_POST['d2']) && isset($_POST['m2']) && isset($_POST['y2'])) {
                 //if (isset($_POST['status']) && isset($_POST['date_from']) && isset($_POST['date_to'])) {
-                if (isset($_POST['types'])) {
+                if (isset($_POST['types']) && ($_POST['types'] != "")) {
                     $sql = "SELECT saleorders.*, saleorder_details.amount, garbages.garbage_name, garbages.garbage_types_id , garbage_types.type_name
                          FROM saleorders 
                          INNER JOIN saleorder_details ON (saleorders.id = saleorder_details.saleorders_id) 
@@ -213,6 +212,15 @@ class ReportsController extends Controller {
                          AND saleorders.status IN (:status)
                          AND garbage_types.id = :types
                          AND closed_timestamp BETWEEN :date_from AND :date_to";
+
+                    $sql .= " GROUP BY saleorders.id  ORDER BY saleorders.id DESC";
+
+                    //die($sql);
+                    $dataProvider = new \yii\data\SqlDataProvider([
+                        'sql' => $sql,
+                        //'params' => [':id'=> Yii::$app->user->identity->id,':status' => $_POST['status'], ':date_from' => $_POST['date_from'], ':date_to' => $_POST['date_to']],
+                        'params' => [':id' => Yii::$app->user->identity->id, ':status' => $_POST['status'], ':date_from' => $date_from, ':date_to' => $date_to, ':types' => $_POST['types']],
+                    ]);
                 } else if ($_POST['status'] == 'open') {
                     $sql = "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
@@ -220,6 +228,15 @@ class ReportsController extends Controller {
                          WHERE buyers = :id
                          AND saleorders.status IN (:status)
                          AND post_timestamp BETWEEN :date_from AND :date_to";
+
+                    $sql .= " GROUP BY saleorders.id  ORDER BY saleorders.id DESC";
+
+                    //die($sql);
+                    $dataProvider = new \yii\data\SqlDataProvider([
+                        'sql' => $sql,
+                        //'params' => [':id'=> Yii::$app->user->identity->id,':status' => $_POST['status'], ':date_from' => $_POST['date_from'], ':date_to' => $_POST['date_to']],
+                        'params' => [':id' => Yii::$app->user->identity->id, ':status' => $_POST['status'], ':date_from' => $date_from, ':date_to' => $date_to],
+                    ]);
                 } else if ($_POST['status'] == 'closed') {
                     $sql = "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
@@ -227,6 +244,15 @@ class ReportsController extends Controller {
                          WHERE buyers = :id
                          AND saleorders.status IN (:status)
                          AND closed_timestamp BETWEEN :date_from AND :date_to";
+
+                    $sql .= " GROUP BY saleorders.id  ORDER BY saleorders.id DESC";
+
+                    //die($sql);
+                    $dataProvider = new \yii\data\SqlDataProvider([
+                        'sql' => $sql,
+                        //'params' => [':id'=> Yii::$app->user->identity->id,':status' => $_POST['status'], ':date_from' => $_POST['date_from'], ':date_to' => $_POST['date_to']],
+                        'params' => [':id' => Yii::$app->user->identity->id, ':status' => $_POST['status'], ':date_from' => $date_from, ':date_to' => $date_to],
+                    ]);
                 } else if ($_POST['status'] == 'reserve') {
                     $sql = "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
@@ -234,6 +260,15 @@ class ReportsController extends Controller {
                          WHERE buyers = :id
                          AND saleorders.status IN (:status)
                          AND reserve_timestamp BETWEEN :date_from AND :date_to";
+
+                    $sql .= " GROUP BY saleorders.id  ORDER BY saleorders.id DESC";
+
+                    //die($sql);
+                    $dataProvider = new \yii\data\SqlDataProvider([
+                        'sql' => $sql,
+                        //'params' => [':id'=> Yii::$app->user->identity->id,':status' => $_POST['status'], ':date_from' => $_POST['date_from'], ':date_to' => $_POST['date_to']],
+                        'params' => [':id' => Yii::$app->user->identity->id, ':status' => $_POST['status'], ':date_from' => $date_from, ':date_to' => $date_to],
+                    ]);
                 } else if ($_POST['status'] == 'cancel') {
                     $sql = "SELECT saleorders.*, COUNT(saleorder_details.id) AS amount  
                          FROM saleorders 
@@ -241,18 +276,20 @@ class ReportsController extends Controller {
                          WHERE buyers = :id
                          AND saleorders.status IN (:status)
                          AND closed_timestamp BETWEEN :date_from AND :date_to";
+
+                    $sql .= " GROUP BY saleorders.id  ORDER BY saleorders.id DESC";
+
+                    //die($sql);
+                    $dataProvider = new \yii\data\SqlDataProvider([
+                        'sql' => $sql,
+                        //'params' => [':id'=> Yii::$app->user->identity->id,':status' => $_POST['status'], ':date_from' => $_POST['date_from'], ':date_to' => $_POST['date_to']],
+                        'params' => [':id' => Yii::$app->user->identity->id, ':status' => $_POST['status'], ':date_from' => $date_from, ':date_to' => $date_to],
+                    ]);
                 }
 
 
 
-                $sql .= " GROUP BY saleorders.id
-                         ORDER BY saleorders.id DESC";
 
-                $dataProvider = new \yii\data\SqlDataProvider([
-                    'sql' => $sql,
-                    //'params' => [':id'=> Yii::$app->user->identity->id,':status' => $_POST['status'], ':date_from' => $_POST['date_from'], ':date_to' => $_POST['date_to']],
-                    'params' => [':id' => Yii::$app->user->identity->id, ':status' => $_POST['status'], ':date_from' => $date_from, ':date_to' => $date_to, ':types' => $_POST['types']],
-                ]);
                 return $this->render('buyer', [
                             'dataProvider' => $dataProvider,
                             'post' => TRUE,

@@ -81,7 +81,8 @@ $province = \app\models\Province::getProvinceName($model->users->province);
                                 </tr>
                                 <tr>
                                     <td><strong>ที่อยู่</strong></td>
-                                    <td><?= app\models\Users::getAddress($model->buyers) ?></td>
+                                    <?php $ad = \app\models\Users::getAddressUser($model->buyers);  ?>
+                                    <td><?php echo $ad; ?></td>
                                 </tr>
                             </table>
 <?php } ?>

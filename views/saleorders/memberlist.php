@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $users->firstname . ' ' . $users->lastname;
                                     </tr>
                                     <tr>
                                         <td><b>ที่อยู่</b></td>
-                                        <td><?= ' เลขที่ ' . $users->address . ' ตำบล ' . $users->sub_district . ' อำเภอ ' . $users->district . ' จังหวัด ' . $users->province ?></td>
+                                        <td><?= \app\models\Users::getAddress($users->id); ?></td>
                                     </tr>
                                     <tr>
                                         <td><b>หมายเลขโทรศัพท์</b></td>

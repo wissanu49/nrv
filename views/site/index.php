@@ -21,6 +21,7 @@ $map = new Map([
 
 foreach ($users as $c) {
     $coords = new LatLng(['lat' => $c->lattitude, 'lng' => $c->longitude]);
+    $address = \app\models\Users::getAddressUser($c->id);
     $marker = new Marker(['position' => $coords]);
     $marker->attachInfoWindow(
             new InfoWindow([
@@ -30,7 +31,7 @@ foreach ($users as $c) {
               <table class="table table-striped table-bordered table-hover">
                 <tr>
                     <td>ที่อยู่</td>
-                    <td>' . $c->address . ' ' . $c->sub_district . ' ' . $c->district . ' ' . $c->province . ' ' . $c->mobile . '</td>
+                    <td>เลขที่ ' . $address . '</td>
                 </tr>
               
                 <tr>
