@@ -55,10 +55,10 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
      */
     public function rules() {
         return [
-            [['username', 'password', 'firstname', 'lastname', 'address', 'sub_district', 'district', 'province', 'lattitude', 'longitude', 'mobile', 'role'], 'required'],
+            [['username', 'password', 'firstname', 'lastname', 'address', 'sub_district', 'district', 'province', 'lattitude', 'longitude', 'mobile', 'role','status'], 'required'],
             //[['username', 'firstname', 'lastname', 'address', 'sub_district', 'district', 'province', 'lattitude', 'longitude', 'mobile'], 'required', 'on' => 'update'],
             [['role'], 'string'],
-            [['username', 'sub_district', 'district', 'image'], 'string', 'max' => 100],
+            [['username', 'sub_district', 'district', 'image','status'], 'string', 'max' => 100],
             [['password', 'firstname', 'lastname', 'address', 'province'], 'string', 'max' => 200],
             [['lattitude', 'longitude'], 'string', 'max' => 50],
             [['mobile'], 'string', 'max' => 20],
@@ -78,6 +78,7 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
         $sn = parent::scenarios();
         $sn['updateProfile'] = ['username', 'firstname', 'lastname', 'address', 'sub_district', 'district', 'province', 'lattitude', 'longitude', 'mobile', 'role'];
         $sn['upImage'] = ['image'];
+        $sn['updateStatus'] = ['status'];
         $sn['changepwd'] = ['old_password', 'new_password', 'repeat_password'];
         return $sn;
     }
@@ -103,7 +104,8 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
             'role' => 'ประเภทสมาชิก',
             'old_password' => 'รหัสผ่านเดิม',
             'new_password' => 'รหัสผ่านใหม่',
-            'repeat_password' => 'ยืนยันรหัสผ่านใหม่'
+            'repeat_password' => 'ยืนยันรหัสผ่านใหม่',
+            'status' => 'สถานะ'
         ];
     }
 
@@ -249,7 +251,7 @@ class Users extends \yii\db\ActiveRecord implements \yii\web\IdentityInterface {
     }
 
     public static function findByUsername($username) {
-        return self::findOne(['username' => $username]);
+        return self::findOne(['username' => $username, 'status' => 'active']);
     }
 
     public function validatePassword($password) {

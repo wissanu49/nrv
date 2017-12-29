@@ -2,6 +2,8 @@
 
 use yii\helpers\Html;
 use yii\grid\GridView;
+use yii\helpers\Url;
+use yii\widgets\Pjax;
 
 /* @var $this yii\web\View */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -23,6 +25,7 @@ $this->params['breadcrumbs'][] = $this->title;
             <?=
             GridView::widget([
                 'dataProvider' => $dataProvider,
+                'filterModel' => $searchModel,
                 'columns' => [
                     ['class' => 'yii\grid\SerialColumn'],
                     //'id',
@@ -36,9 +39,21 @@ $this->params['breadcrumbs'][] = $this->title;
                     // 'province',
                     // 'lattitude',
                     // 'longitude',
-                    // 'image',
-                    // 'mobile',
+                    // 'image',                    
                     'role',
+                     [
+                                //'label' => 'สถานะ',
+                                'attribute' => 'status',
+                                'format' => 'raw',
+                                'filter' => TRUE, //กำหนด filter แบบ dropDownlist จากข้อมูล ใน field แบบ foreignKey
+                                'value' => function ($data) {
+                                    if ($data['status'] == 'active') {
+                                        return Html::a('active', '', ['class' => 'btn-sm btn-success']);
+                                    } else if ($data['status'] == 'suspend') {
+                                        return Html::a('suspend', '', ['class' => 'btn-sm btn-danger']);
+                                    } 
+                                }
+                            ],
                     [
                         'class' => 'yii\grid\ActionColumn',
                         'visibleButtons' => [
@@ -49,17 +64,17 @@ $this->params['breadcrumbs'][] = $this->title;
                         'template' => '{update} {delete}',
                         'buttons' => [
                             'update' => function ($url, $model) {
-                                return Html::a('<span class="fa fa-edit"></span>แก้ไข', $url, [
+                                return Html::a('แก้ไข', $url, [
                                             'title' => '',
                                             'class' => 'btn btn-primary btn-xs',
                                 ]);
                             },
                             'delete' => function ($url, $model) {
-                                return Html::a('<span class="fa fa-trash"></span>ลบ', $url, [
+                                return Html::a('Active / Suspend', $url, [
                                             'title' => '',
-                                            'data-confirm' => Yii::t('yii', 'คุณต้องการลบสมาชิก ใช่ หรือ ไม่?'),
+                                            'data-confirm' => Yii::t('yii', 'คุณต้องการเปลี่ยนสถานะสมาชิก ใช่ หรือ ไม่?'),
                                             'data-method' => 'post',
-                                            'class' => 'btn btn-danger btn-xs',
+                                            'class' => 'btn btn-warning btn-xs',
                                 ]);
                             }
                         ],

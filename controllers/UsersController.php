@@ -4,6 +4,7 @@ namespace app\controllers;
 
 use Yii;
 use app\models\Users;
+use app\models\UsersSearch;
 use yii\data\ActiveDataProvider;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -120,12 +121,15 @@ class UsersController extends Controller {
      * @return mixed
      */
     public function actionIndex() {
-        $dataProvider = new ActiveDataProvider([
-            'query' => Users::find(),
-        ]);
-
+        //$dataProvider = new ActiveDataProvider([
+        //    'query' => Users::find(),
+        //]);
+        $searchModel = new UsersSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        
         return $this->render('index', [
                     'dataProvider' => $dataProvider,
+                    'searchModel' => $searchModel,
         ]);
     }
 
@@ -286,10 +290,28 @@ class UsersController extends Controller {
      * @return mixed
      */
     public function actionDelete($id) {
-        $this->findModel($id)->delete();
-
+        //$this->findModel($id)->delete();
+        $model = $this->findModel($id);
+        $model->setScenario('updateStatus');
+        
+        if($model->status == "suspend"){
+            $model->status = "active";            
+        }else{
+            $model->status = "suspend";
+        }
+        
+         try {
+            if ($model->save()) {
+                Yii::$app->session->setFlash('success', 'บันทึกข้อมูลเรียบร้อย');
+            } else {
+                return $this->redirect(['index']);
+            }
+        } catch (Exception $e) {
+            
+        }
         return $this->redirect(['index']);
     }
+    
 
     /**
      * Finds the Users model based on its primary key value.
