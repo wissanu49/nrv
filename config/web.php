@@ -1,5 +1,8 @@
 <?php
+
 use \yii\web\Request;
+use kartik\mpdf\Pdf;
+
 $params = require(__DIR__ . '/params.php');
 $db = require(__DIR__ . '/db.php');
 $baseUrl = str_replace('/web', '', (new Request)->getBaseUrl());
@@ -21,21 +24,21 @@ $config = [
             'bundles' => [
                 'dosamigos\google\maps\MapAsset' => [
                     'options' => [
-			'key' => 'AIzaSyB991l8cB4DC63bh5D_GFoWo_gX2pFjFQ0',// ใส่ API 
-			'language' => 'th',
-			'version' => '3.1.18'
-			]
-		]
+                        'key' => 'AIzaSyB991l8cB4DC63bh5D_GFoWo_gX2pFjFQ0', // ใส่ API 
+                        'language' => 'th',
+                        'version' => '3.1.18'
+                    ]
+                ]
             ]
         ],
         /*
-	'view' => [
-			 'theme' => [
-				 'pathMap' => [
-					'@app/views' => '@vendor/dmstr/yii2-adminlte-asset/example-views/yiisoft/yii2-app'
-				 ],
-			 ],
-	],
+          'view' => [
+          'theme' => [
+          'pathMap' => [
+          '@app/views' => '@vendor/dmstr/yii2-adminlte-asset/example-views/yiisoft/yii2-app'
+          ],
+          ],
+          ],
          * 
          */
         'cache' => [
@@ -91,15 +94,15 @@ if (YII_ENV_DEV) {
     $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+            // uncomment the following to add your IP if you are not connecting from localhost.
+            //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 
     $config['bootstrap'][] = 'gii';
     $config['modules']['gii'] = [
         'class' => 'yii\gii\Module',
-        // uncomment the following to add your IP if you are not connecting from localhost.
-        //'allowedIPs' => ['127.0.0.1', '::1'],
+            // uncomment the following to add your IP if you are not connecting from localhost.
+            //'allowedIPs' => ['127.0.0.1', '::1'],
     ];
 }
 

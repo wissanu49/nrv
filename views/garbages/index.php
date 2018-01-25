@@ -80,9 +80,7 @@ JS;
                             'view' => function ($model, $key, $index) {
                                 return false;
                             },
-                            'delete' => function ($model, $key, $index) {
-                                return false;
-                            }
+                            
                         ],
                         'template' => '{update} {delete}',
                         'buttons' => [
